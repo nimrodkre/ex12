@@ -7,7 +7,10 @@ class BoardUI:
         self.__board = board
         self.__canvas = tkinter.Canvas()
         self.__buttons = []
-        self.__score = 0
+        self.__score = None
+        self.__quit = None
+        self.__start = None
+        self.__guess = None
         self.__screen = tkinter.Tk()
 
     @property
@@ -27,6 +30,18 @@ class BoardUI:
         return self.__score
 
     @property
+    def quit(self):
+        return self.__quit
+
+    @property
+    def start(self):
+        return self.__start
+
+    @property
+    def guess(self):
+        return self.__guess
+
+    @property
     def canvas(self):
         return self.__canvas
 
@@ -42,6 +57,18 @@ class BoardUI:
     def screen(self, screen):
         self.__screen = screen
 
+    @quit.setter
+    def quit(self, quit):
+        self.__quit = quit
+
+    @guess.setter
+    def guess(self, guess):
+        self.__guess = guess
+
+    @start.setter
+    def start(self, start):
+        self.__start = start
+
     @score.setter
     def score(self, score):
         self.__score = score
@@ -49,3 +76,11 @@ class BoardUI:
     @canvas.setter
     def canvas(self, canvas):
         self.__score = canvas
+
+    def build_board(self):
+        pass
+
+    def build_score_box(self):
+        pass
+
+    def build
