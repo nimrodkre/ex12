@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6d1db480-15f5-4e6d-a7a6-41019d7a747d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/board_bl.py" beforeDir="false" afterPath="$PROJECT_DIR$/board_bl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/board_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/board_ui.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,8 +16,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/collaborator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="20" column="12" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
+            <state relative-caret-position="289">
+              <caret line="17" column="12" lean-forward="true" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -27,7 +27,7 @@
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/boggle.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="51">
@@ -36,12 +36,26 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/board_ui.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="172">
-              <caret line="80" column="37" selection-start-line="80" selection-start-column="37" selection-end-line="80" selection-end-column="37" />
+            <state relative-caret-position="174">
+              <caret line="99" column="19" lean-forward="true" selection-start-line="99" selection-start-column="19" selection-end-line="99" selection-end-column="19" />
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/boggle_board_randomizer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-138" />
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/boggle_dict.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2722259" />
           </provider>
         </entry>
       </file>
@@ -84,14 +98,15 @@
         <option value="$PROJECT_DIR$/board.py" />
         <option value="$PROJECT_DIR$/boggle.py" />
         <option value="$PROJECT_DIR$/collaborator.py" />
-        <option value="$PROJECT_DIR$/board_ui.py" />
         <option value="$PROJECT_DIR$/board_bl.py" />
+        <option value="$PROJECT_DIR$/board_ui.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="952" />
-    <option name="width" value="977" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="951" />
+    <option name="y" value="-9" />
+    <option name="width" value="978" />
     <option name="height" value="1048" />
   </component>
   <component name="ProjectView">
@@ -193,7 +208,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="761" y="-7" width="782" height="838" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
@@ -235,14 +250,6 @@
     </layout-to-restore>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/boggle_board_randomizer.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/boggle_dict.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4364821" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/board.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -260,27 +267,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/board_ui.py">
+    <entry file="file://$PROJECT_DIR$/boggle.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="80" column="37" selection-start-line="80" selection-start-column="37" selection-end-line="80" selection-end-column="37" />
+        <state relative-caret-position="51">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/boggle_dict.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2722259" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/boggle_board_randomizer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-138" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/collaborator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" column="12" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
+        <state relative-caret-position="289">
+          <caret line="17" column="12" lean-forward="true" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/board_bl.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/boggle.py">
+    <entry file="file://$PROJECT_DIR$/board_ui.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        <state relative-caret-position="174">
+          <caret line="99" column="19" lean-forward="true" selection-start-line="99" selection-start-column="19" selection-end-line="99" selection-end-column="19" />
         </state>
       </provider>
     </entry>
