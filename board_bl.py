@@ -1,3 +1,7 @@
+import datetime
+
+INITIAL_TIME = 5
+
 
 class BoardBL:
     def __init__(self, board, words):
@@ -5,6 +9,8 @@ class BoardBL:
         self.__words = words
         self.__guessed_words = set()
         self.__score = 0
+        self.__time = datetime.timedelta(seconds=INITIAL_TIME)
+        self.__times_up = None
 
     @property
     def words(self):
@@ -21,6 +27,19 @@ class BoardBL:
     @property
     def guessed_words(self):
         return list(sorted(self.__guessed_words))
+
+    @property
+    def time(self):
+        return self.__time
+
+    def decrease_time(self):
+        if self.__time.seconds > 0:
+            self.__time -= datetime.timedelta(seconds=1)
+            if self.is_time_up() and self.__times_up is not None:
+                self.__times_up()
+
+    def is_time_up(self):
+        return self.__time.total_seconds() == 0
 
     def guess_word(self, word):
         """
@@ -47,3 +66,11 @@ class BoardBL:
 
     def get_letter(self, i, j):
         return self.__board[i][j]
+
+    def restart_game(self):
+        self.__guessed_words = set()
+        self.__score = 0
+        self.__time = datetime.timedelta(seconds=INITIAL_TIME)
+
+    def times_up_sub(self, action):
+        self.__times_up = action

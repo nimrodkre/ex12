@@ -1,3 +1,5 @@
+import datetime
+import time
 import tkinter
 
 import boggle_board_randomizer
@@ -44,6 +46,7 @@ class BoardUI:
         self.__prev_i = -1
         self.__prev_j = -1
         self.__guess = ''
+        self.__controller.times_up_sub(self.__end_game)
 
     @property
     def buttons(self):
@@ -199,7 +202,22 @@ class BoardUI:
                                 rowspan=WORDS_ROWSPAN)
 
     def build_timer(self):
-        pass
+        self.__timer = tkinter.Label(self.root, height=1, width=10,
+                                     text=str(self.__controller.time)[2:])
+        self.__timer.grid(row=TIMER_ROW,
+                          column=TIMER_COL,
+                          rowspan=TIMER_COLSPAN)
+
+    def build_undo(self):
+        self.undo = tkinter.Button(text="START", height=1, width=10,
+                                   command=self.__start_game)
+        self.undo.grid(row=BUTTONS_START_ROW, column=BUTTONS_START_COL)
+
+    def __update_timer(self):
+        self.__controller.decrease_time()
+        self.__timer.config(text=str(self.__controller.time)[2:])
+        if not self.__controller.is_time_up():
+            self.root.after(1000, self.__update_timer)
 
     def build_ui(self):
         self.build_score()
@@ -209,6 +227,7 @@ class BoardUI:
         self.build_guess()
         self.build_undo()
         self.build_words_guessed()
+        self.build_timer()
 
     def __guess_word(self):
         if self.__controller.guess_word(self.__guess):
@@ -220,10 +239,11 @@ class BoardUI:
         self.__prev_j = -1
         self.__guess = ''
 
+    def __start_game(self):
+        self.__update_timer()
 
-board = boggle_board_randomizer.randomize_board()
-boggle_bl = BoardBL(board, ['a', 'e', 'i', 'o', 'u'])
-controller = Controller(boggle_bl)
-a = BoardUI(controller)
-a.build_ui()
-a.root.mainloop()
+    def __end_game(self):
+        print('Times UP!')
+
+    def __restart_game(self):
+        self.__controller.restart_game()
