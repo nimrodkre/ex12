@@ -1,5 +1,3 @@
-import itertools
-
 
 class BoardBL:
     def __init__(self, words):

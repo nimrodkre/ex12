@@ -5,7 +5,7 @@ class BoardUI:
 
     def __init__(self, board):
         self.__board = board
-        self.__canvas = tkinter.Canvas()
+        self.__root = tkinter.Tk()
         self.__buttons = []
         self.__score = None
         self.__quit = None
@@ -42,8 +42,8 @@ class BoardUI:
         return self.__guess
 
     @property
-    def canvas(self):
-        return self.__canvas
+    def root(self):
+        return self.__root
 
     @board.setter
     def board(self, board):
@@ -73,14 +73,32 @@ class BoardUI:
     def score(self, score):
         self.__score = score
 
-    @canvas.setter
-    def canvas(self, canvas):
-        self.__score = canvas
+    @root.setter
+    def root(self, root):
+        self.__score = root
 
-    def build_board(self):
+    def __button_callback(self, i, j):
+        # for some reason not working
         pass
 
-    def build_score_box(self):
-        pass
+    def build_buttons(self):
+        for i in range(len(self.board)):
+            self.buttons.append([tkinter.Button(self.root,
+                                                text=self.board[i][j],
+                                                command=lambda: self.__button_callback(
+                                                    i, j)) for j in
+                                 range(len(self.board[0]))])
+        for i in range(len(self.buttons)):
+            for j in range(len(self.buttons[0])):
+                self.buttons[i][j].grid(row=i + 1, column=j + 1)
 
-    def build
+    def build_score(self):
+        self.score = tkinter.Text(self.root, height=1, width=10)
+        self.score.insert(tkinter.INSERT, "Score=0")
+        self.score.grid(row=0, column=0)
+
+
+a = BoardUI([['a', 'b'], ['g', 'j']])
+a.build_score()
+a.build_buttons()
+a.root.mainloop()
