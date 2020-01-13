@@ -48,6 +48,7 @@ class BoardUI:
         self.__prev_j = -1
         self.__guess = ''
         self.__controller.times_up_sub(self.__end_game)
+        self.__root.title('Crazy Boggle')
 
     @property
     def buttons(self):
