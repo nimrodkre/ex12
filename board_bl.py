@@ -1,11 +1,13 @@
 import datetime
 
+import boggle_board_randomizer
+
 INITIAL_TIME = 5
 
 
 class BoardBL:
-    def __init__(self, board, words):
-        self.__board = board
+    def __init__(self, words):
+        self.__board = boggle_board_randomizer.randomize_board()
         self.__words = words
         self.__guessed_words = set()
         self.__score = 0
@@ -71,6 +73,7 @@ class BoardBL:
         self.__guessed_words = set()
         self.__score = 0
         self.__time = datetime.timedelta(seconds=INITIAL_TIME)
+        self.__board = boggle_board_randomizer.randomize_board()
 
     def times_up_sub(self, action):
         self.__times_up = action

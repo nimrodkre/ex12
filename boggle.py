@@ -1,4 +1,3 @@
-import boggle_board_randomizer
 from board_bl import BoardBL
 from board_ui import BoardUI
 from controller import Controller
@@ -9,14 +8,15 @@ WORDS_FILE = "boggle_dict.txt"
 class BoggleGameManager:
     def __init__(self, words):
         self.__words = words
+        self.__ui = None
+        self.__boggle_bl = None
 
     def start_game(self):
-        board = boggle_board_randomizer.randomize_board()
-        boggle_bl = BoardBL(board, self.__words)
-        controller = Controller(boggle_bl)
-        a = BoardUI(controller)
-        a.build_ui()
-        a.root.mainloop()
+        self.__boggle_bl = BoardBL(self.__words)
+        controller = Controller(self.__boggle_bl)
+        self.__ui = BoardUI(controller)
+        self.__ui.build_ui()
+        self.__ui.root.mainloop()
 
 
 def load_words():
