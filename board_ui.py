@@ -1,6 +1,7 @@
 import datetime
 import time
 import tkinter
+from tkinter import DISABLED, NORMAL
 
 import boggle_board_randomizer
 from board_bl import BoardBL
@@ -153,9 +154,7 @@ class BoardUI:
     def build_buttons(self):
         for i in range(len(self.__controller.board)):
             self.buttons.append([tkinter.Button(self.root,
-                                                text=
-                                                self.__controller.get_letter(i,
-                                                                             j)
+                                                text='X'
                                                 , height=3, width=7,
                                                 command=self.make_callback(i,
                                                                            j),
@@ -182,7 +181,8 @@ class BoardUI:
                                columnspan=CURRENT_LETTERS_COLSPAN)
 
     def build_quit(self):
-        self.quit = tkinter.Button(text="QUIT", height=1, width=15, bg="red")
+        self.quit = tkinter.Button(text="QUIT", height=1, width=15, bg="red",
+                                   command=quit)
         self.quit.grid(row=QUIT_ROW, column=QUIT_COL)
 
     def build_guess(self):
@@ -208,10 +208,10 @@ class BoardUI:
                           column=TIMER_COL,
                           rowspan=TIMER_COLSPAN)
 
-    def build_undo(self):
-        self.undo = tkinter.Button(text="START", height=1, width=10,
-                                   command=self.__start_game)
-        self.undo.grid(row=BUTTONS_START_ROW, column=BUTTONS_START_COL)
+    def build_start(self):
+        self.start = tkinter.Button(text="START", height=1, width=10,
+                                    command=self.__start_game)
+        self.start.grid(row=BUTTONS_START_ROW, column=BUTTONS_START_COL)
 
     def __update_timer(self):
         self.__controller.decrease_time()
@@ -227,6 +227,7 @@ class BoardUI:
         self.build_guess()
         self.build_undo()
         self.build_words_guessed()
+        self.build_start()
         self.build_timer()
 
     def __guess_word(self):
@@ -241,9 +242,17 @@ class BoardUI:
 
     def __start_game(self):
         self.__update_timer()
+        self.start.config(text='START', command=self.__restart_game,
+                          state=DISABLED)
+        for i, btn_row in enumerate(self.buttons):
+            for j, btn in enumerate(btn_row):
+                btn.config(text=self.__controller.get_letter(i, j))
 
     def __end_game(self):
+        self.start.config(text='RESTART', command=self.__restart_game,
+                          state=NORMAL)
         print('Times UP!')
 
     def __restart_game(self):
         self.__controller.restart_game()
+        self.__start_game()
