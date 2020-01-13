@@ -21,9 +21,9 @@ QUIT_COL = 0
 TIMER_ROW = 5
 TIMER_COL = 1
 TIMER_COLSPAN = 1
-MSG_LBL_ROW = 5
+MSG_LBL_ROW = 6
 MSG_LBL_COL = 2
-MSG_LBL_COLSPAN = 2
+MSG_LBL_COLSPAN = 3
 START_BTN_ROW = 5
 START_BTN_COL = 4
 
@@ -206,8 +206,8 @@ class BoardUI:
         self.start.grid(row=START_BTN_ROW, column=START_BTN_COL)
 
     def build_msg_label(self):
-        self.__msg_lbl = tkinter.Label(text='')
-        self.__msg_lbl.grid(row=MSG_LBL_ROW, column=MSG_LBL_COL)
+        self.__msg_lbl = tkinter.Label(text='', anchor='w')
+        self.__msg_lbl.grid(row=MSG_LBL_ROW, column=MSG_LBL_COL, columnspan=MSG_LBL_COLSPAN)
 
     def __update_timer(self):
         self.__controller.decrease_time()
@@ -228,15 +228,18 @@ class BoardUI:
         self.build_msg_label()
 
     def __guess_word(self):
-        if self.__controller.guess_word(self.__guess):
+        guess_word_msg = self.__controller.guess_word(self.__guess)
+        if guess_word_msg is None:
             guessed_words = 'WORDS\n' + '\n'.join(
                 self.__controller.guessed_words)
             self.words_guessed.config(text=guessed_words)
+            guess_word_msg = 'Nice one!'
         self.score_tb.config(text='Score=' + str(self.__controller.score))
         self.__prev_i = -1
         self.__prev_j = -1
         self.__guess = ''
         self.current_word.configure(text='Letters: ' + self.__guess)
+        self.__msg_lbl.configure(text=guess_word_msg)
 
     def __start_game(self):
         self.__update_timer()
@@ -250,7 +253,7 @@ class BoardUI:
     def __end_game(self):
         self.start.config(text='RESTART', command=self.__restart_game,
                           state=NORMAL)
-        self.__msg_lbl.config(text='Times UP!')
+        self.__msg_lbl.config(text='Times Up!')
         for i, btn_row in enumerate(self.buttons):
             for j, btn in enumerate(btn_row):
                 btn.config(state=DISABLED)

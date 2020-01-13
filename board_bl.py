@@ -48,13 +48,15 @@ class BoardBL:
         :param word: the letters to check
         :return: score to give if the word is good, else -1
         """
+        if word == '':
+            return 'Come on, you can do better!'
         if word in self.__guessed_words:
-            return False
+            return 'Already guessed!'
         if word.upper() in self.__words:
             self.__guessed_words.add(word)
             self.__score += len(word) ** 2
-            return True
-        return False
+            return None
+        return '{}? That\'s not a real word...'.format(word)
 
     def is_letter_valid(self, i, j, prev_i, prev_j):
         if prev_i == -1 or prev_j == -1:
