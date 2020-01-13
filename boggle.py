@@ -25,7 +25,6 @@ def load_words():
 
 
 if __name__ == "__main__":
-    print(len(load_words()))
     words = load_words()
     boggle_manager = BoggleGameManager(words)
     boggle_manager.start_game()
