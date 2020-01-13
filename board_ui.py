@@ -1,5 +1,25 @@
 import tkinter
 
+CURRENT_LETTERS_ROW = 0
+CURRENT_LETTERS_COL = 2
+CURRENT_LETTERS_COLSPAN = 3
+GUESS_ROW = 0
+GUESS_COL = 0
+WORDS_ROW = 1
+WORDS_COL = 0
+WORDS_ROWSPAN = 3
+SCORE_ROW = 4
+SCORE_COL = 0
+BUTTONS_START_ROW = 1
+BUTTONS_START_COL = 1
+UNDO_ROW = 0
+UNDO_COL = 1
+QUIT_ROW = 5
+QUIT_COL = 0
+TIMER_ROW = 5
+TIMER_COL = 2
+TIMER_COLSPAN = 3
+
 
 class BoardUI:
 
@@ -12,6 +32,8 @@ class BoardUI:
         self.__start = None
         self.__guess = None
         self.__current_word = None
+        self.__words_guessed = None
+        self.__timer = None
         self.__undo = None
         self.__screen = tkinter.Tk()
 
@@ -50,6 +72,14 @@ class BoardUI:
     @property
     def undo(self):
         return self.__undo
+
+    @property
+    def words_guessed(self):
+        return self.__words_guessed
+
+    @property
+    def timer(self):
+        return self.__timer
 
     @property
     def root(self):
@@ -91,6 +121,14 @@ class BoardUI:
     def undo(self, undo):
         self.__undo = undo
 
+    @words_guessed.setter
+    def words_guessed(self, words_guessed):
+        self.__words_guessed = words_guessed
+
+    @timer.setter
+    def timer(self, timer):
+        self.__timer = timer
+
     @root.setter
     def root(self, root):
         self.__score = root
@@ -106,30 +144,54 @@ class BoardUI:
         for i in range(len(self.board)):
             self.buttons.append([tkinter.Button(self.root,
                                                 text=self.board[i][j],
-                                                height=1, width=7,
+                                                height=3, width=7,
                                                 command=self.make_callback(i,
-                                                                           j))
+                                                                           j),
+                                                padx=10)
                                  for j in
                                  range(len(self.board[0]))])
         for i in range(len(self.buttons)):
             for j in range(len(self.buttons[0])):
-                self.buttons[i][j].grid(row=i + 1, column=j)
+                self.buttons[i][j].grid(row=i + BUTTONS_START_ROW,
+                                        column=j + BUTTONS_START_COL)
 
     def build_score(self):
-        self.score = tkinter.Text(self.root, height=1, width=10)
+        self.score = tkinter.Text(self.root, height=3, width=14, bg="gray")
         self.score.insert(tkinter.INSERT, "Score=0")
-        self.score.grid(row=0, column=0, columnspan=4)
+        self.score.configure(state='disabled')
+        self.score.grid(row=SCORE_ROW, column=SCORE_COL)
 
     def build_current_word(self):
-        pass
+        self.current_word = tkinter.Text(self.root, height=1.3, width=30,
+                                         bg="gray")
+        self.current_word.insert(tkinter.INSERT, "letters:")
+        self.current_word.configure(state='disabled')
+        self.current_word.grid(row=CURRENT_LETTERS_ROW,
+                               column=CURRENT_LETTERS_COL,
+                               columnspan=CURRENT_LETTERS_COLSPAN)
 
     def build_quit(self):
-        pass
+        self.quit = tkinter.Button(text="QUIT", height=1, width=15, bg="red")
+        self.quit.grid(row=QUIT_ROW, column=QUIT_COL)
 
-    def build_quess(self):
-        pass
+    def build_guess(self):
+        self.guess = tkinter.Button(text="GUESS", height=1, width=15)
+        self.guess.grid(row=GUESS_ROW, column=GUESS_COL)
 
     def build_undo(self):
+        self.undo = tkinter.Button(text="UNDO", height=1, width=10)
+        self.undo.grid(row=UNDO_ROW, column=UNDO_COL)
+
+    def build_words_guessed(self):
+        self.words_guessed = tkinter.Text(self.root, height=10, width=14,
+                                          bg="gray")
+        self.words_guessed.insert(tkinter.INSERT, "WORDS")
+        self.words_guessed.configure(state='disabled')
+        self.words_guessed.grid(row=WORDS_ROW,
+                                column=WORDS_COL,
+                                rowspan=WORDS_ROWSPAN)
+
+    def build_timer(self):
         pass
 
 
@@ -137,4 +199,9 @@ a = BoardUI([['a', 'a', 'a', 'a'], ['a', 'a', 'a', 'a'], ['a', 'a', 'a', 'a'],
              ['a', 'a', 'a', 'a']])
 a.build_score()
 a.build_buttons()
+a.build_current_word()
+a.build_quit()
+a.build_guess()
+a.build_undo()
+a.build_words_guessed()
 a.root.mainloop()
