@@ -1,4 +1,5 @@
 import tkinter
+import math
 
 CURRENT_LETTERS_ROW = 0
 CURRENT_LETTERS_COL = 2
@@ -22,6 +23,7 @@ TIMER_COLSPAN = 3
 
 
 class BoardUI:
+    button_coordinates = {}
 
     def __init__(self, board):
         self.__board = board
@@ -36,6 +38,8 @@ class BoardUI:
         self.__timer = None
         self.__undo = None
         self.__screen = tkinter.Tk()
+
+        self.__pressed_buttons = []
 
     @property
     def board(self):
@@ -85,6 +89,10 @@ class BoardUI:
     def root(self):
         return self.__root
 
+    @property
+    def pressed_buttons(self):
+        return self.__pressed_buttons
+
     @board.setter
     def board(self, board):
         self.__board = board
@@ -129,13 +137,55 @@ class BoardUI:
     def timer(self, timer):
         self.__timer = timer
 
+    @pressed_buttons.setter
+    def pressed_buttons(self, pressed_buttons):
+        self.__pressed_buttons = pressed_buttons
+
     @root.setter
     def root(self, root):
         self.__score = root
 
     def __button_callback(self, i, j):
-        # for some reason not working
-        print(i, j)
+        """
+        Add text to current word, enable allowed buttons, and disable
+        not allowed buttons.
+        :param i: the location of the button pressed
+        :param j: the location of the button pressed
+        :return: None
+        """
+        self.current_word.configure(state='normal')
+        self.current_word.insert(tkinter.INSERT, self.buttons[i][j]['text'])
+        self.current_word.configure(state='disabled')
+        self.__disable_buttons(i, j)
+        self.__enable_buttons(i, j)
+        self.pressed_buttons.append(self.buttons[i][j])
+
+    def __disable_buttons(self, row, col):
+        """
+        disable all buttons not touching our button
+        :param row: row
+        :param col: col
+        :return: None
+        """
+        for i in range(len(self.board)):
+            for j in range(len(self.board[0])):
+                if math.fabs(i - row) > 1 or math.fabs(j - col) > 1:
+                    self.buttons[i][j]['state'] = 'disabled'
+        self.buttons[row][col]['state'] = 'disabled'
+
+    def __enable_buttons(self, row, col):
+        """
+        enables the buttons around this button
+        :param row:
+        :param col:
+        :return:
+        """
+        for i in range(len(self.board)):
+            for j in range(len(self.board[0])):
+                if not (math.fabs(i - row) > 1 or math.fabs(j - col) > 1) and \
+                        self.buttons[i][j] not in self.pressed_buttons and not(
+                        i == row and j == col):
+                    self.buttons[i][j]['state'] = 'normal'
 
     def make_callback(self, i, j):
         return lambda: self.__button_callback(i, j)
@@ -152,6 +202,7 @@ class BoardUI:
                                  range(len(self.board[0]))])
         for i in range(len(self.buttons)):
             for j in range(len(self.buttons[0])):
+                BoardUI.button_coordinates[self.buttons[i][j]] = (i, j)
                 self.buttons[i][j].grid(row=i + BUTTONS_START_ROW,
                                         column=j + BUTTONS_START_COL)
 
@@ -177,6 +228,9 @@ class BoardUI:
     def build_guess(self):
         self.guess = tkinter.Button(text="GUESS", height=1, width=15)
         self.guess.grid(row=GUESS_ROW, column=GUESS_COL)
+
+    def __undo_callback(self):
+        pass
 
     def build_undo(self):
         self.undo = tkinter.Button(text="UNDO", height=1, width=10)
