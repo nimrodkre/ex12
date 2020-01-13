@@ -72,7 +72,7 @@ class BoardBL:
     def restart_game(self):
         self.__guessed_words = set()
         self.__score = 0
-        self.__time = datetime.timedelta(seconds=INITIAL_TIME)
+        self.__time = datetime.timedelta(seconds=INITIAL_TIME + 1)
         self.__board = boggle_board_randomizer.randomize_board()
 
     def times_up_sub(self, action):
