@@ -38,8 +38,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/board_ui.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="244" column="18" selection-start-line="244" selection-start-column="18" selection-end-line="244" selection-end-column="18" />
+            <state relative-caret-position="291">
+              <caret line="286" column="14" selection-start-line="286" selection-start-column="14" selection-end-line="286" selection-end-column="14" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -88,6 +88,7 @@
     <replaceStrings>
       <replace>screen</replace>
       <replace>root</replace>
+      <replace>self</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -289,8 +290,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/board_ui.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="244" column="18" selection-start-line="244" selection-start-column="18" selection-end-line="244" selection-end-column="18" />
+        <state relative-caret-position="291">
+          <caret line="286" column="14" selection-start-line="286" selection-start-column="14" selection-end-line="286" selection-end-column="14" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>

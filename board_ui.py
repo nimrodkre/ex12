@@ -41,6 +41,16 @@ class BoardUI:
 
         self.__pressed_buttons = []
 
+    def build_game(self):
+        self.build_score()
+        self.build_buttons()
+        self.build_current_word()
+        self.build_quit()
+        self.build_guess()
+        self.build_undo()
+        self.build_words_guessed()
+        self.root.mainloop()
+
     @property
     def board(self):
         return self.__board
@@ -274,11 +284,5 @@ class BoardUI:
 
 a = BoardUI([['a', 'a', 'a', 'a'], ['a', 'a', 'a', 'a'], ['a', 'a', 'a', 'a'],
              ['a', 'a', 'a', 'a']])
-a.build_score()
-a.build_buttons()
-a.build_current_word()
-a.build_quit()
-a.build_guess()
-a.build_undo()
-a.build_words_guessed()
-a.root.mainloop()
+a.build_game()
+
