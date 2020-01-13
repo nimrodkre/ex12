@@ -35,7 +35,7 @@ class BoardUI:
         self.__root = tkinter.Tk()
         self.__buttons = []
         self.__score_tb = None
-        self.__quit = None
+        self.__quit_btn = None
         self.__start = None
         self.__guess_btn = None
         self.__current_word = None
@@ -62,8 +62,8 @@ class BoardUI:
         return self.__score_tb
 
     @property
-    def quit(self):
-        return self.__quit
+    def quit_btn(self):
+        return self.__quit_btn
 
     @property
     def start(self):
@@ -101,9 +101,9 @@ class BoardUI:
     def screen(self, screen):
         self.__screen = screen
 
-    @quit.setter
-    def quit(self, quit):
-        self.__quit = quit
+    @quit_btn.setter
+    def quit_btn(self, quit_btn):
+        self.__quit_btn = quit_btn
 
     @guess_btn.setter
     def guess_btn(self, guess):
@@ -144,7 +144,7 @@ class BoardUI:
             print('Not valid!!!')
             return
         self.__guess += self.__controller.get_letter(i, j)
-        print(self.__guess)
+        self.current_word.configure(text='Letters: ' + self.__guess)
         self.__prev_i = i
         self.__prev_j = j
 
@@ -158,7 +158,7 @@ class BoardUI:
                                                 , height=3, width=7,
                                                 command=self.make_callback(i,
                                                                            j),
-                                                padx=10)
+                                                padx=10, state=DISABLED)
                                  for j in
                                  range(len(self.__controller.board[0]))])
         for i in range(len(self.buttons)):
@@ -172,18 +172,17 @@ class BoardUI:
         self.score_tb.grid(row=SCORE_ROW, column=SCORE_COL)
 
     def build_current_word(self):
-        self.current_word = tkinter.Text(self.root, height=1.3, width=30,
-                                         bg="gray")
-        self.current_word.insert(tkinter.INSERT, "letters:")
-        self.current_word.configure(state='disabled')
+        self.current_word = tkinter.Label(self.root, height=1, width=30,
+                                          bg="gray", text="letters:")
         self.current_word.grid(row=CURRENT_LETTERS_ROW,
                                column=CURRENT_LETTERS_COL,
                                columnspan=CURRENT_LETTERS_COLSPAN)
 
     def build_quit(self):
-        self.quit = tkinter.Button(text="QUIT", height=1, width=15, bg="red",
-                                   command=quit)
-        self.quit.grid(row=QUIT_ROW, column=QUIT_COL)
+        self.quit_btn = tkinter.Button(text="QUIT", height=1, width=15,
+                                       bg="red",
+                                       command=quit)
+        self.quit_btn.grid(row=QUIT_ROW, column=QUIT_COL)
 
     def build_guess(self):
         self.guess_btn = tkinter.Button(text="GUESS", height=1, width=15,
@@ -239,6 +238,7 @@ class BoardUI:
         self.__prev_i = -1
         self.__prev_j = -1
         self.__guess = ''
+        self.current_word.configure(text='Letters: ' + self.__guess)
 
     def __start_game(self):
         self.__update_timer()
@@ -246,7 +246,8 @@ class BoardUI:
                           state=DISABLED)
         for i, btn_row in enumerate(self.buttons):
             for j, btn in enumerate(btn_row):
-                btn.config(text=self.__controller.get_letter(i, j))
+                btn.config(text=self.__controller.get_letter(i, j),
+                           state=NORMAL)
 
     def __end_game(self):
         self.start.config(text='RESTART', command=self.__restart_game,
