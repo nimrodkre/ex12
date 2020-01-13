@@ -36,7 +36,7 @@ class BoardUI:
         self.__start = None
         self.__guess_btn = None
         self.__current_word = None
-        self.__words_guessed = None
+        self.__words_guessed_tb = None
         self.__timer = None
         self.__undo = None
         self.__screen = tkinter.Tk()
@@ -44,7 +44,6 @@ class BoardUI:
         self.__prev_i = -1
         self.__prev_j = -1
         self.__guess = ''
-        self.__score = 0
 
     @property
     def buttons(self):
@@ -80,7 +79,7 @@ class BoardUI:
 
     @property
     def words_guessed(self):
-        return self.__words_guessed
+        return self.__words_guessed_tb
 
     @property
     def timer(self):
@@ -124,7 +123,7 @@ class BoardUI:
 
     @words_guessed.setter
     def words_guessed(self, words_guessed):
-        self.__words_guessed = words_guessed
+        self.__words_guessed_tb = words_guessed
 
     @timer.setter
     def timer(self, timer):
@@ -166,9 +165,8 @@ class BoardUI:
                                         column=j + BUTTONS_START_COL)
 
     def build_score(self):
-        self.score_tb = tkinter.Text(self.root, height=3, width=14, bg="gray")
-        self.score_tb.insert(tkinter.INSERT, "Score=0")
-        self.score_tb.configure(state='disabled')
+        self.score_tb = tkinter.Label(self.root, height=3, width=14, bg="gray",
+                                      text="Score=0")
         self.score_tb.grid(row=SCORE_ROW, column=SCORE_COL)
 
     def build_current_word(self):
@@ -194,10 +192,8 @@ class BoardUI:
         self.undo.grid(row=UNDO_ROW, column=UNDO_COL)
 
     def build_words_guessed(self):
-        self.words_guessed = tkinter.Text(self.root, height=10, width=14,
-                                          bg="gray")
-        self.words_guessed.insert(tkinter.INSERT, "WORDS")
-        self.words_guessed.configure(state='disabled')
+        self.words_guessed = tkinter.Label(self.root, height=10, width=14,
+                                           bg="gray", text="WORDS")
         self.words_guessed.grid(row=WORDS_ROW,
                                 column=WORDS_COL,
                                 rowspan=WORDS_ROWSPAN)
@@ -215,17 +211,18 @@ class BoardUI:
         self.build_words_guessed()
 
     def __guess_word(self):
-        word_score = self.__controller.guess_word(self.__guess)
-        self.__score += word_score
-        if word_score > 0:
-            self.__words_guessed
+        if self.__controller.guess_word(self.__guess):
+            guessed_words = 'WORDS\n' + '\n'.join(
+                self.__controller.guessed_words)
+            self.words_guessed.config(text=guessed_words)
+        self.score_tb.config(text='Score=' + str(self.__controller.score))
         self.__prev_i = -1
         self.__prev_j = -1
         self.__guess = ''
 
 
 board = boggle_board_randomizer.randomize_board()
-boggle_bl = BoardBL(board, ['asd'])
+boggle_bl = BoardBL(board, ['a', 'e', 'i', 'o', 'u'])
 controller = Controller(boggle_bl)
 a = BoardUI(controller)
 a.build_ui()
