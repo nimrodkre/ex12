@@ -251,6 +251,10 @@ class BoardUI:
         self.start.config(text='RESTART', command=self.__restart_game,
                           state=NORMAL)
         self.__msg_lbl.config(text='Times UP!')
+        for i, btn_row in enumerate(self.buttons):
+            for j, btn in enumerate(btn_row):
+                btn.config(state=DISABLED)
+
 
     def __restart_game(self):
         self.__controller.restart_game()
