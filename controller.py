@@ -1,4 +1,4 @@
-class Collaborator:
+class Controller:
     def __init__(self, board_bl, board_ui):
         self.__board_bl = board_bl
 
