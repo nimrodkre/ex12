@@ -23,8 +23,8 @@ TIMER_COLSPAN = 3
 
 class BoardUI:
 
-    def __init__(self, board):
-        self.__board = board
+    def __init__(self, controller):
+        self.__controller = controller
         self.__root = tkinter.Tk()
         self.__buttons = []
         self.__score = None
@@ -36,10 +36,6 @@ class BoardUI:
         self.__timer = None
         self.__undo = None
         self.__screen = tkinter.Tk()
-
-    @property
-    def board(self):
-        return self.__board
 
     @property
     def buttons(self):
@@ -84,10 +80,6 @@ class BoardUI:
     @property
     def root(self):
         return self.__root
-
-    @board.setter
-    def board(self, board):
-        self.__board = board
 
     @buttons.setter
     def buttons(self, buttons):
@@ -141,7 +133,7 @@ class BoardUI:
         return lambda: self.__button_callback(i, j)
 
     def build_buttons(self):
-        for i in range(len(self.board)):
+        for i in range(len(self.__controller.board)):
             self.buttons.append([tkinter.Button(self.root,
                                                 text=self.board[i][j],
                                                 height=3, width=7,
@@ -194,14 +186,11 @@ class BoardUI:
     def build_timer(self):
         pass
 
-
-a = BoardUI([['a', 'a', 'a', 'a'], ['a', 'a', 'a', 'a'], ['a', 'a', 'a', 'a'],
-             ['a', 'a', 'a', 'a']])
-a.build_score()
-a.build_buttons()
-a.build_current_word()
-a.build_quit()
-a.build_guess()
-a.build_undo()
-a.build_words_guessed()
-a.root.mainloop()
+    def build_ui(self):
+        self.build_score()
+        self.build_buttons()
+        self.build_current_word()
+        self.build_quit()
+        self.build_guess()
+        self.build_undo()
+        self.build_words_guessed()

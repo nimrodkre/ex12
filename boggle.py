@@ -15,9 +15,6 @@ class BoggleGameManager:
         boggle_bl = BoardBL(board, self.__words)
         controller = Controller(boggle_bl)
         a = BoardUI(controller)
-
-        a.build_score()
-        a.build_buttons()
         a.root.mainloop()
 
 
