@@ -1,10 +1,5 @@
-import datetime
-import time
 import tkinter
 from tkinter import DISABLED, NORMAL
-
-import boggle_board_randomizer
-from board_bl import BoardBL
 from controller import Controller
 
 CURRENT_LETTERS_ROW = 0
@@ -42,7 +37,6 @@ class BoardUI:
         self.__words_guessed_tb = None
         self.__timer = None
         self.__undo = None
-        self.__screen = tkinter.Tk()
 
         self.__prev_i = -1
         self.__prev_j = -1
@@ -53,10 +47,6 @@ class BoardUI:
     @property
     def buttons(self):
         return self.__buttons
-
-    @property
-    def screen(self):
-        return self.__screen
 
     @property
     def score_tb(self):
@@ -97,10 +87,6 @@ class BoardUI:
     @buttons.setter
     def buttons(self, buttons):
         self.__buttons = buttons
-
-    @screen.setter
-    def screen(self, screen):
-        self.__screen = screen
 
     @quit_btn.setter
     def quit_btn(self, quit_btn):
@@ -212,6 +198,9 @@ class BoardUI:
         self.start = tkinter.Button(text="START", height=1, width=10,
                                     command=self.__start_game)
         self.start.grid(row=BUTTONS_START_ROW, column=BUTTONS_START_COL)
+
+    def build_msg_label(self):
+        pass
 
     def __update_timer(self):
         self.__controller.decrease_time()
