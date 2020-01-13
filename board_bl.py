@@ -18,14 +18,6 @@ class BoardBL:
         :param letters: the letters to check
         :return: score to give if the word is good, else -1
         """
-        if letters in self.words:
+        if letters in self.__words:
             return len(letters) ** 2
         return -1
-
-    def is_letter_valid(self, row, col, prev_row, prev_col):
-        if prev_col == -1 or prev_row == -1:
-            return True
-        if row == prev_row and col == prev_col:
-            return False
-        return (prev_row + 1 >= row >= prev_row - 1
-                and prev_col + 1 >= col >= prev_col - 1)
