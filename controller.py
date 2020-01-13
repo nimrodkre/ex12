@@ -6,11 +6,14 @@ class Controller:
     def board(self):
         return self.__board_bl.board
 
-    def guess_word(self):
-        return self.__board_bl.check_word()
+    def guess_word(self, word):
+        return self.__board_bl.check_word(word)
 
     def is_letter_valid(self, row, col, prev_row, prev_col):
         return self.__board_bl.is_letter_valid(row, col, prev_row, prev_col)
+
+    def get_letter(self, i, j):
+        return self.__board_bl.get_letter(i, j)
 
     def quit_game(self):
         pass

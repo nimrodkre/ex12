@@ -27,21 +27,24 @@ TIMER_COLSPAN = 3
 
 class BoardUI:
 
-    def __init__(self, controller):
+    def __init__(self, controller: Controller):
         self.__controller = controller
         self.__root = tkinter.Tk()
         self.__buttons = []
-        self.__score = None
+        self.__score_tb = None
         self.__quit = None
         self.__start = None
-        self.__guess = None
+        self.__guess_btn = None
         self.__current_word = None
         self.__words_guessed = None
         self.__timer = None
         self.__undo = None
+        self.__screen = tkinter.Tk()
+
         self.__prev_i = -1
         self.__prev_j = -1
-        self.__screen = tkinter.Tk()
+        self.__guess = ''
+        self.__score = 0
 
     @property
     def buttons(self):
@@ -52,8 +55,8 @@ class BoardUI:
         return self.__screen
 
     @property
-    def score(self):
-        return self.__score
+    def score_tb(self):
+        return self.__score_tb
 
     @property
     def quit(self):
@@ -64,8 +67,8 @@ class BoardUI:
         return self.__start
 
     @property
-    def guess(self):
-        return self.__guess
+    def guess_btn(self):
+        return self.__guess_btn
 
     @property
     def current_word(self):
@@ -99,17 +102,17 @@ class BoardUI:
     def quit(self, quit):
         self.__quit = quit
 
-    @guess.setter
-    def guess(self, guess):
-        self.__guess = guess
+    @guess_btn.setter
+    def guess_btn(self, guess):
+        self.__guess_btn = guess
 
     @start.setter
     def start(self, start):
         self.__start = start
 
-    @score.setter
-    def score(self, score):
-        self.__score = score
+    @score_tb.setter
+    def score_tb(self, score):
+        self.__score_tb = score
 
     @current_word.setter
     def current_word(self, current_word):
@@ -129,15 +132,16 @@ class BoardUI:
 
     @root.setter
     def root(self, root):
-        self.__score = root
+        self.__score_tb = root
 
     def __button_callback(self, i, j):
         # for some reason not working
-        if not self.__controller.is_valid_letter(i, j, self.__prev_i,
+        if not self.__controller.is_letter_valid(i, j, self.__prev_i,
                                                  self.__prev_j):
             print('Not valid!!!')
             return
-        print(i, j)
+        self.__guess += self.__controller.get_letter(i, j)
+        print(self.__guess)
         self.__prev_i = i
         self.__prev_j = j
 
@@ -148,8 +152,9 @@ class BoardUI:
         for i in range(len(self.__controller.board)):
             self.buttons.append([tkinter.Button(self.root,
                                                 text=
-                                                self.__controller.board[i][j],
-                                                height=3, width=7,
+                                                self.__controller.get_letter(i,
+                                                                             j)
+                                                , height=3, width=7,
                                                 command=self.make_callback(i,
                                                                            j),
                                                 padx=10)
@@ -161,10 +166,10 @@ class BoardUI:
                                         column=j + BUTTONS_START_COL)
 
     def build_score(self):
-        self.score = tkinter.Text(self.root, height=3, width=14, bg="gray")
-        self.score.insert(tkinter.INSERT, "Score=0")
-        self.score.configure(state='disabled')
-        self.score.grid(row=SCORE_ROW, column=SCORE_COL)
+        self.score_tb = tkinter.Text(self.root, height=3, width=14, bg="gray")
+        self.score_tb.insert(tkinter.INSERT, "Score=0")
+        self.score_tb.configure(state='disabled')
+        self.score_tb.grid(row=SCORE_ROW, column=SCORE_COL)
 
     def build_current_word(self):
         self.current_word = tkinter.Text(self.root, height=1.3, width=30,
@@ -180,8 +185,9 @@ class BoardUI:
         self.quit.grid(row=QUIT_ROW, column=QUIT_COL)
 
     def build_guess(self):
-        self.guess = tkinter.Button(text="GUESS", height=1, width=15)
-        self.guess.grid(row=GUESS_ROW, column=GUESS_COL)
+        self.guess_btn = tkinter.Button(text="GUESS", height=1, width=15,
+                                        command=self.__guess_word)
+        self.guess_btn.grid(row=GUESS_ROW, column=GUESS_COL)
 
     def build_undo(self):
         self.undo = tkinter.Button(text="UNDO", height=1, width=10)
@@ -207,6 +213,15 @@ class BoardUI:
         self.build_guess()
         self.build_undo()
         self.build_words_guessed()
+
+    def __guess_word(self):
+        word_score = self.__controller.guess_word(self.__guess)
+        self.__score += word_score
+        if word_score > 0:
+            self.__words_guessed
+        self.__prev_i = -1
+        self.__prev_j = -1
+        self.__guess = ''
 
 
 board = boggle_board_randomizer.randomize_board()
