@@ -50,7 +50,7 @@ class BoardBL:
         """
         if word in self.__guessed_words:
             return False
-        if word.lower() in self.__words:
+        if word.upper() in self.__words:
             self.__guessed_words.add(word)
             self.__score += len(word) ** 2
             return True
