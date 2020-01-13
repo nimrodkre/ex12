@@ -166,7 +166,7 @@ class BoardUI:
 
     def build_current_word(self):
         self.current_word = tkinter.Label(self.root, height=1, width=30,
-                                          bg="gray", text="letters:")
+                                          bg="gray", text="letters:", anchor='w')
         self.current_word.grid(row=CURRENT_LETTERS_ROW,
                                column=CURRENT_LETTERS_COL,
                                columnspan=CURRENT_LETTERS_COLSPAN)
@@ -188,7 +188,7 @@ class BoardUI:
 
     def build_words_guessed(self):
         self.words_guessed = tkinter.Label(self.root, height=10, width=14,
-                                           bg="gray", text="WORDS")
+                                           bg="gray", text="WORDS", anchor='n')
         self.words_guessed.grid(row=WORDS_ROW,
                                 column=WORDS_COL,
                                 rowspan=WORDS_ROWSPAN)
@@ -254,7 +254,6 @@ class BoardUI:
         for i, btn_row in enumerate(self.buttons):
             for j, btn in enumerate(btn_row):
                 btn.config(state=DISABLED)
-
 
     def __restart_game(self):
         self.__controller.restart_game()
