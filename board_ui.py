@@ -193,7 +193,8 @@ class BoardUI:
         for i in range(len(self.board)):
             for j in range(len(self.board[0])):
                 if not (math.fabs(i - row) > 1 or math.fabs(j - col) > 1) and \
-                        self.buttons[i][j] not in self.pressed_buttons and not(
+                        self.buttons[i][
+                            j] not in self.pressed_buttons and not (
                         i == row and j == col):
                     self.buttons[i][j]['state'] = 'normal'
 
@@ -258,15 +259,14 @@ class BoardUI:
         self.__enable_buttons(*loc)
 
     def __undo_callback(self):
-        print(len(self.pressed_buttons))
         if len(self.pressed_buttons) == 0:
             return
         self.__del_last_letter()
         self.__undo_button(self.pressed_buttons.pop())
 
-
     def build_undo(self):
-        self.undo = tkinter.Button(text="UNDO", height=1, width=10, command=self.__undo_callback)
+        self.undo = tkinter.Button(text="UNDO", height=1, width=10,
+                                   command=self.__undo_callback)
         self.undo.grid(row=UNDO_ROW, column=UNDO_COL)
 
     def build_words_guessed(self):
@@ -285,4 +285,3 @@ class BoardUI:
 a = BoardUI([['a', 'a', 'a', 'a'], ['a', 'a', 'a', 'a'], ['a', 'a', 'a', 'a'],
              ['a', 'a', 'a', 'a']])
 a.build_game()
-
