@@ -1,5 +1,9 @@
 import tkinter
 
+import boggle_board_randomizer
+from board_bl import BoardBL
+from controller import Controller
+
 CURRENT_LETTERS_ROW = 0
 CURRENT_LETTERS_COL = 2
 CURRENT_LETTERS_COLSPAN = 3
@@ -35,6 +39,8 @@ class BoardUI:
         self.__words_guessed = None
         self.__timer = None
         self.__undo = None
+        self.__prev_i = -1
+        self.__prev_j = -1
         self.__screen = tkinter.Tk()
 
     @property
@@ -127,7 +133,13 @@ class BoardUI:
 
     def __button_callback(self, i, j):
         # for some reason not working
+        if not self.__controller.is_valid_letter(i, j, self.__prev_i,
+                                                 self.__prev_j):
+            print('Not valid!!!')
+            return
         print(i, j)
+        self.__prev_i = i
+        self.__prev_j = j
 
     def make_callback(self, i, j):
         return lambda: self.__button_callback(i, j)
@@ -135,13 +147,14 @@ class BoardUI:
     def build_buttons(self):
         for i in range(len(self.__controller.board)):
             self.buttons.append([tkinter.Button(self.root,
-                                                text=self.board[i][j],
+                                                text=
+                                                self.__controller.board[i][j],
                                                 height=3, width=7,
                                                 command=self.make_callback(i,
                                                                            j),
                                                 padx=10)
                                  for j in
-                                 range(len(self.board[0]))])
+                                 range(len(self.__controller.board[0]))])
         for i in range(len(self.buttons)):
             for j in range(len(self.buttons[0])):
                 self.buttons[i][j].grid(row=i + BUTTONS_START_ROW,
@@ -194,3 +207,11 @@ class BoardUI:
         self.build_guess()
         self.build_undo()
         self.build_words_guessed()
+
+
+board = boggle_board_randomizer.randomize_board()
+boggle_bl = BoardBL(board, ['asd'])
+controller = Controller(boggle_bl)
+a = BoardUI(controller)
+a.build_ui()
+a.root.mainloop()

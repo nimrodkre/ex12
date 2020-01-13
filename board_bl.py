@@ -1,8 +1,8 @@
 
 class BoardBL:
-    def __init__(self, words, board):
-        self.__words = words
+    def __init__(self, board, words,):
         self.__board = board
+        self.__words = words
 
     @property
     def words(self):
@@ -21,3 +21,12 @@ class BoardBL:
         if letters in self.__words:
             return len(letters) ** 2
         return -1
+
+    def is_letter_valid(self, i, j, prev_i, prev_j):
+        if prev_i == -1 or prev_j == -1:
+            return True
+
+        if prev_i == i and prev_j == j:
+            return False
+
+        return prev_i - 1 <= i <= prev_i + 1 and prev_j - 1 <= j <= prev_j + 1

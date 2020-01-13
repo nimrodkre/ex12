@@ -10,7 +10,7 @@ class Controller:
         return self.__board_bl.check_word()
 
     def is_letter_valid(self, row, col, prev_row, prev_col):
-        return self.is_letter_valid(row, col, prev_row, prev_col)
+        return self.__board_bl.is_letter_valid(row, col, prev_row, prev_col)
 
     def quit_game(self):
         pass
