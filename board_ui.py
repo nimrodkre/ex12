@@ -229,11 +229,34 @@ class BoardUI:
         self.guess = tkinter.Button(text="GUESS", height=1, width=15)
         self.guess.grid(row=GUESS_ROW, column=GUESS_COL)
 
+    def __del_last_letter(self):
+        self.current_word.configure(state='normal')
+        word = self.current_word.get("1.0", 'end')
+        new_word = word[:len(word) - 2]
+        self.current_word.delete("1.0", "end")
+        self.current_word.insert("1.0", new_word)
+        self.current_word.configure(state='disabled')
+
+    def __undo_button(self, button):
+        if len(self.pressed_buttons) == 0:
+            for i in range(len(self.buttons)):
+                for j in range(len(self.buttons[0])):
+                    self.buttons[i][j]['state'] = 'normal'
+            return
+        loc = BoardUI.button_coordinates[self.pressed_buttons[-1]]
+        self.__disable_buttons(*loc)
+        self.__enable_buttons(*loc)
+
     def __undo_callback(self):
-        pass
+        print(len(self.pressed_buttons))
+        if len(self.pressed_buttons) == 0:
+            return
+        self.__del_last_letter()
+        self.__undo_button(self.pressed_buttons.pop())
+
 
     def build_undo(self):
-        self.undo = tkinter.Button(text="UNDO", height=1, width=10)
+        self.undo = tkinter.Button(text="UNDO", height=1, width=10, command=self.__undo_callback)
         self.undo.grid(row=UNDO_ROW, column=UNDO_COL)
 
     def build_words_guessed(self):
