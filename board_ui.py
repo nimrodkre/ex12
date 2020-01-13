@@ -19,8 +19,13 @@ UNDO_COL = 1
 QUIT_ROW = 5
 QUIT_COL = 0
 TIMER_ROW = 5
-TIMER_COL = 2
-TIMER_COLSPAN = 3
+TIMER_COL = 1
+TIMER_COLSPAN = 1
+MSG_LBL_ROW = 5
+MSG_LBL_COL = 2
+MSG_LBL_COLSPAN = 2
+START_BTN_ROW = 5
+START_BTN_COL = 4
 
 
 class BoardUI:
@@ -37,6 +42,7 @@ class BoardUI:
         self.__words_guessed_tb = None
         self.__timer = None
         self.__undo = None
+        self.__msg_lbl = None
 
         self.__prev_i = -1
         self.__prev_j = -1
@@ -128,7 +134,7 @@ class BoardUI:
         # for some reason not working
         if not self.__controller.is_letter_valid(i, j, self.__prev_i,
                                                  self.__prev_j):
-            print('Not valid!!!')
+            self.__msg_lbl.config(text='Not valid!!!')
             return
         self.__guess += self.__controller.get_letter(i, j)
         self.current_word.configure(text='Letters: ' + self.__guess)
@@ -197,10 +203,11 @@ class BoardUI:
     def build_start(self):
         self.start = tkinter.Button(text="START", height=1, width=10,
                                     command=self.__start_game)
-        self.start.grid(row=BUTTONS_START_ROW, column=BUTTONS_START_COL)
+        self.start.grid(row=START_BTN_ROW, column=START_BTN_COL)
 
     def build_msg_label(self):
-        pass
+        self.__msg_lbl = tkinter.Label(text='')
+        self.__msg_lbl.grid(row=MSG_LBL_ROW, column=MSG_LBL_COL)
 
     def __update_timer(self):
         self.__controller.decrease_time()
@@ -218,6 +225,7 @@ class BoardUI:
         self.build_words_guessed()
         self.build_start()
         self.build_timer()
+        self.build_msg_label()
 
     def __guess_word(self):
         if self.__controller.guess_word(self.__guess):
@@ -242,8 +250,9 @@ class BoardUI:
     def __end_game(self):
         self.start.config(text='RESTART', command=self.__restart_game,
                           state=NORMAL)
-        print('Times UP!')
+        self.__msg_lbl.config(text='Times UP!')
 
     def __restart_game(self):
         self.__controller.restart_game()
         self.__start_game()
+        self.__msg_lbl.config(text='')

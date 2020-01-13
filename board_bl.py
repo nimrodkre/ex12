@@ -1,5 +1,4 @@
 import datetime
-
 import boggle_board_randomizer
 
 INITIAL_TIME = 5
