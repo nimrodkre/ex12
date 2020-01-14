@@ -58,15 +58,6 @@ class BoardBL:
             return None
         return '{}? That\'s not a real word...'.format(word)
 
-    def is_letter_valid(self, i, j, prev_i, prev_j):
-        if prev_i == -1 or prev_j == -1:
-            return True
-
-        if prev_i == i and prev_j == j:
-            return False
-
-        return prev_i - 1 <= i <= prev_i + 1 and prev_j - 1 <= j <= prev_j + 1
-
     def get_letter(self, i, j):
         return self.__board[i][j]
 

@@ -47,8 +47,6 @@ class BoardUI:
         self.__pressed_buttons = []
         self.__msg_lbl = None
 
-        self.__prev_i = -1
-        self.__prev_j = -1
         self.__guessed_word = ''
         self.__controller.times_up_sub(self.__end_game)
         self.__root.title('Crazy Boggle')
@@ -216,8 +214,6 @@ class BoardUI:
             self.__words_guessed.config(text=guessed_words)
             guess_word_msg = 'Nice one!'
         self.__score.config(text='Score=' + str(self.__controller.score))
-        self.__prev_i = -1
-        self.__prev_j = -1
         self.__guessed_word = ''
         self.__current_word.config(text='Letters: ' + self.__guessed_word)
         self.__msg_lbl.config(text=guess_word_msg)

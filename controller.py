@@ -23,9 +23,6 @@ class Controller:
     def guess_word(self, word):
         return self.__board_bl.guess_word(word)
 
-    def is_letter_valid(self, row, col, prev_row, prev_col):
-        return self.__board_bl.is_letter_valid(row, col, prev_row, prev_col)
-
     def get_letter(self, i, j):
         return self.__board_bl.get_letter(i, j)
 
