@@ -54,7 +54,10 @@ class BoardBL:
             return 'Already guessed!'
         if word.upper() in self.__words:
             self.__guessed_words.add(word)
-            self.__score += len(word) ** 2
+            if 'QU' in word.upper():
+                self.__score += (len(word) - 1) ** 2
+            else:
+                self.__score += len(word) ** 2
             return None
         return '{}? That\'s not a real word...'.format(word)
 

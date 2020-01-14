@@ -140,7 +140,10 @@ class BoardUI:
         self.__guess.grid(row=GUESS_ROW, column=GUESS_COL)
 
     def __del_last_letter(self):
-        self.__guessed_word = self.__guessed_word[:-1]
+        if self.__guessed_word.upper().endswith('QU'):
+            self.__guessed_word = self.__guessed_word[:-2]
+        else:
+            self.__guessed_word = self.__guessed_word[:-1]
         self.__current_word.config(text='Letters: ' + self.__guessed_word)
 
     def __undo_button(self):
