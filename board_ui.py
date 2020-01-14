@@ -205,7 +205,7 @@ class BoardUI:
 
     def build_current_word(self):
         self.current_word = tkinter.Label(self.root, height=1, width=30,
-                                          bg="gray", text="letters:", anchor='w')
+                                          bg="gray", text="Letters:", anchor='w')
         self.current_word.grid(row=CURRENT_LETTERS_ROW,
                                column=CURRENT_LETTERS_COL,
                                columnspan=CURRENT_LETTERS_COLSPAN)
