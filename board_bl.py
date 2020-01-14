@@ -1,7 +1,7 @@
 import datetime
 import boggle_board_randomizer
 
-INITIAL_TIME = 10
+INITIAL_TIME = 180
 
 
 class BoardBL:
