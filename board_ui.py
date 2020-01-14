@@ -50,6 +50,7 @@ class BoardUI:
         self.__guessed_word = ''
         self.__controller.times_up_sub(self.__end_game)
         self.__root.title('Crazy Boggle')
+        self.__root.configure(bg="azure")
 
     @property
     def root(self):
@@ -107,7 +108,8 @@ class BoardUI:
                                                   , height=3, width=7,
                                                   command=self.make_callback(i,
                                                                              j),
-                                                  padx=10, state=DISABLED)
+                                                  padx=10, state=DISABLED,
+                                                  bg="turquoise")
                                    for j in
                                    range(len(self.__controller.board[0]))])
         for i in range(len(self.__buttons)):
@@ -118,13 +120,13 @@ class BoardUI:
 
     def build_score(self):
         self.__score = tkinter.Label(self.__root, height=3, width=14,
-                                     bg="gray",
+                                     bg="light blue",
                                      text="Score=0")
         self.__score.grid(row=SCORE_ROW, column=SCORE_COL)
 
     def build_current_word(self):
         self.__current_word = tkinter.Label(self.__root, height=1, width=30,
-                                            bg="gray", text="Letters:",
+                                            bg="light blue", text="Letters:",
                                             anchor='w')
         self.__current_word.grid(row=CURRENT_LETTERS_ROW,
                                  column=CURRENT_LETTERS_COL,
@@ -132,14 +134,14 @@ class BoardUI:
 
     def build_quit(self):
         self.__quit = tkinter.Button(text="QUIT", height=1, width=15,
-                                     bg="red",
+                                     bg="salmon1",
                                      command=quit)
         self.__quit.grid(row=QUIT_ROW, column=QUIT_COL)
 
     def build_guess(self):
         self.__guess = tkinter.Button(text="GUESS", height=1, width=15,
                                       command=self.__guess_word,
-                                      state=DISABLED)
+                                      state=DISABLED, bg="plum2")
         self.__guess.grid(row=GUESS_ROW, column=GUESS_COL)
 
     def __del_last_letter(self):
@@ -169,12 +171,12 @@ class BoardUI:
     def build_undo(self):
         self.__undo = tkinter.Button(text="UNDO", height=1, width=10,
                                      command=self.__undo_callback,
-                                     state=DISABLED)
+                                     state=DISABLED, bg="plum2")
         self.__undo.grid(row=UNDO_ROW, column=UNDO_COL)
 
     def build_words_guessed(self):
         self.__words_guessed = tkinter.Label(self.__root, height=10, width=14,
-                                             bg="gray", text="WORDS",
+                                             bg="light blue", text="WORDS",
                                              anchor='n')
         self.__words_guessed.grid(row=WORDS_ROW,
                                   column=WORDS_COL,
@@ -182,14 +184,15 @@ class BoardUI:
 
     def build_timer(self):
         self.__timer = tkinter.Label(self.__root, height=1, width=10,
-                                     text=str(self.__controller.time)[2:])
+                                     text=str(self.__controller.time)[2:],
+                                     bg="light blue")
         self.__timer.grid(row=TIMER_ROW,
                           column=TIMER_COL,
                           rowspan=TIMER_COLSPAN)
 
     def build_start(self):
         self.start = tkinter.Button(text="START", height=1, width=10,
-                                    command=self.__start_game)
+                                    command=self.__start_game, bg="chartreuse2")
         self.start.grid(row=START_BTN_ROW, column=START_BTN_COL)
 
     def build_msg_label(self):
