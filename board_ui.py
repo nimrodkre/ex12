@@ -146,7 +146,7 @@ class BoardUI:
         :return: None
         """
         self.__guessed_word += self.buttons[i][j]['text']
-        self.current_word.config(text=self.__guessed_word)
+        self.current_word.config(text='Letters: ' + self.__guessed_word)
         self.__disable_buttons(i, j)
         self.__enable_buttons(i, j)
         self.pressed_buttons.append(self.buttons[i][j])
@@ -223,7 +223,7 @@ class BoardUI:
 
     def __del_last_letter(self):
         self.__guessed_word = self.__guessed_word[:-1]
-        self.current_word.config(text=self.__guessed_word)
+        self.current_word.config(text='Letters: ' + self.__guessed_word)
 
     def __undo_button(self):
         if len(self.pressed_buttons) == 0:
@@ -297,9 +297,14 @@ class BoardUI:
         self.score.config(text='Score=' + str(self.__controller.score))
         self.__prev_i = -1
         self.__prev_j = -1
-        self.__guess = ''
-        self.current_word.configure(text='Letters: ' + self.__guessed_word)
-        self.__msg_lbl.configure(text=guess_word_msg)
+        self.__guessed_word = ''
+        self.current_word.config(text='Letters: ' + self.__guessed_word)
+        self.__msg_lbl.config(text=guess_word_msg)
+
+        self.__pressed_buttons = []
+        for row in self.__buttons:
+            for btn in row:
+                btn.config(state=NORMAL)
 
     def __start_game(self):
         self.__update_timer()
