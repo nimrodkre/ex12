@@ -1,6 +1,7 @@
 import tkinter
 from tkinter import DISABLED, NORMAL
 from controller import Controller
+import math
 
 CURRENT_LETTERS_ROW = 0
 CURRENT_LETTERS_COL = 2
@@ -29,20 +30,20 @@ START_BTN_COL = 4
 
 
 class BoardUI:
+    button_coordinates = {}
 
     def __init__(self, controller: Controller):
         self.__controller = controller
         self.__root = tkinter.Tk()
         self.__buttons = []
-        self.__score_tb = None
-        self.__quit_btn = None
+        self.__score = None
+        self.__quit = None
         self.__start = None
-        self.__guess_btn = None
+        self.__guess = None
         self.__current_word = None
-        self.__words_guessed_tb = None
+        self.__words_guessed = None
         self.__timer = None
         self.__undo = None
-        self.__msg_lbl = None
 
         self.__prev_i = -1
         self.__prev_j = -1
@@ -55,20 +56,20 @@ class BoardUI:
         return self.__buttons
 
     @property
-    def score_tb(self):
-        return self.__score_tb
+    def score(self):
+        return self.__score
 
     @property
-    def quit_btn(self):
-        return self.__quit_btn
+    def quit(self):
+        return self.__quit
 
     @property
     def start(self):
         return self.__start
 
     @property
-    def guess_btn(self):
-        return self.__guess_btn
+    def guess(self):
+        return self.__guess
 
     @property
     def current_word(self):
@@ -80,7 +81,7 @@ class BoardUI:
 
     @property
     def words_guessed(self):
-        return self.__words_guessed_tb
+        return self.__words_guessed
 
     @property
     def timer(self):
@@ -90,25 +91,29 @@ class BoardUI:
     def root(self):
         return self.__root
 
+    @property
+    def pressed_buttons(self):
+        return self.__pressed_buttons
+
     @buttons.setter
     def buttons(self, buttons):
         self.__buttons = buttons
 
-    @quit_btn.setter
-    def quit_btn(self, quit_btn):
-        self.__quit_btn = quit_btn
+    @quit.setter
+    def quit(self, quit):
+        self.__quit = quit
 
-    @guess_btn.setter
-    def guess_btn(self, guess):
-        self.__guess_btn = guess
+    @guess.setter
+    def guess(self, guess):
+        self.__guess = guess
 
     @start.setter
     def start(self, start):
         self.__start = start
 
-    @score_tb.setter
-    def score_tb(self, score):
-        self.__score_tb = score
+    @score.setter
+    def score(self, score):
+        self.__score = score
 
     @current_word.setter
     def current_word(self, current_word):
@@ -120,26 +125,62 @@ class BoardUI:
 
     @words_guessed.setter
     def words_guessed(self, words_guessed):
-        self.__words_guessed_tb = words_guessed
+        self.__words_guessed = words_guessed
 
     @timer.setter
     def timer(self, timer):
         self.__timer = timer
 
+    @pressed_buttons.setter
+    def pressed_buttons(self, pressed_buttons):
+        self.__pressed_buttons = pressed_buttons
+
     @root.setter
     def root(self, root):
-        self.__score_tb = root
+        self.__score = root
 
     def __button_callback(self, i, j):
-        # for some reason not working
-        if not self.__controller.is_letter_valid(i, j, self.__prev_i,
-                                                 self.__prev_j):
-            self.__msg_lbl.config(text='Not valid!!!')
-            return
-        self.__guess += self.__controller.get_letter(i, j)
-        self.current_word.configure(text='Letters: ' + self.__guess)
-        self.__prev_i = i
-        self.__prev_j = j
+        """
+        Add text to current word, enable allowed buttons, and disable
+        not allowed buttons.
+        :param i: the location of the button pressed
+        :param j: the location of the button pressed
+        :return: None
+        """
+        self.current_word.configure(state='normal')
+        self.current_word.insert(tkinter.INSERT, self.buttons[i][j]['text'])
+        self.current_word.configure(state='disabled')
+        self.__disable_buttons(i, j)
+        self.__enable_buttons(i, j)
+        self.pressed_buttons.append(self.buttons[i][j])
+
+    def __disable_buttons(self, row, col):
+        """
+        disable all buttons not touching our button
+        :param row: row
+        :param col: col
+        :return: None
+        """
+        for i in range(len(self.board)):
+            for j in range(len(self.board[0])):
+                if math.fabs(i - row) > 1 or math.fabs(j - col) > 1:
+                    self.buttons[i][j]['state'] = 'disabled'
+        self.buttons[row][col]['state'] = 'disabled'
+
+    def __enable_buttons(self, row, col):
+        """
+        enables the buttons around this button
+        :param row:
+        :param col:
+        :return:
+        """
+        for i in range(len(self.board)):
+            for j in range(len(self.board[0])):
+                if not (math.fabs(i - row) > 1 or math.fabs(j - col) > 1) and \
+                        self.buttons[i][
+                            j] not in self.pressed_buttons and not (
+                        i == row and j == col):
+                    self.buttons[i][j]['state'] = 'normal'
 
     def make_callback(self, i, j):
         return lambda: self.__button_callback(i, j)
@@ -156,13 +197,14 @@ class BoardUI:
                                  range(len(self.__controller.board[0]))])
         for i in range(len(self.buttons)):
             for j in range(len(self.buttons[0])):
+                BoardUI.button_coordinates[self.buttons[i][j]] = (i, j)
                 self.buttons[i][j].grid(row=i + BUTTONS_START_ROW,
                                         column=j + BUTTONS_START_COL)
 
     def build_score(self):
-        self.score_tb = tkinter.Label(self.root, height=3, width=14, bg="gray",
+        self.score = tkinter.Label(self.root, height=3, width=14, bg="gray",
                                       text="Score=0")
-        self.score_tb.grid(row=SCORE_ROW, column=SCORE_COL)
+        self.score.grid(row=SCORE_ROW, column=SCORE_COL)
 
     def build_current_word(self):
         self.current_word = tkinter.Label(self.root, height=1, width=30,
@@ -178,12 +220,37 @@ class BoardUI:
         self.quit_btn.grid(row=QUIT_ROW, column=QUIT_COL)
 
     def build_guess(self):
-        self.guess_btn = tkinter.Button(text="GUESS", height=1, width=15,
+        self.guess = tkinter.Button(text="GUESS", height=1, width=15,
                                         command=self.__guess_word)
-        self.guess_btn.grid(row=GUESS_ROW, column=GUESS_COL)
+        self.guess.grid(row=GUESS_ROW, column=GUESS_COL)
+
+    def __del_last_letter(self):
+        self.current_word.configure(state='normal')
+        word = self.current_word.get("1.0", 'end')
+        new_word = word[:len(word) - 2]
+        self.current_word.delete("1.0", "end")
+        self.current_word.insert("1.0", new_word)
+        self.current_word.configure(state='disabled')
+
+    def __undo_button(self, button):
+        if len(self.pressed_buttons) == 0:
+            for i in range(len(self.buttons)):
+                for j in range(len(self.buttons[0])):
+                    self.buttons[i][j]['state'] = 'normal'
+            return
+        loc = BoardUI.button_coordinates[self.pressed_buttons[-1]]
+        self.__disable_buttons(*loc)
+        self.__enable_buttons(*loc)
+
+    def __undo_callback(self):
+        if len(self.pressed_buttons) == 0:
+            return
+        self.__del_last_letter()
+        self.__undo_button(self.pressed_buttons.pop())
 
     def build_undo(self):
-        self.undo = tkinter.Button(text="UNDO", height=1, width=10)
+        self.undo = tkinter.Button(text="UNDO", height=1, width=10,
+                                   command=self.__undo_callback)
         self.undo.grid(row=UNDO_ROW, column=UNDO_COL)
 
     def build_words_guessed(self):
