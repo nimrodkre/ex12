@@ -309,6 +309,10 @@ class BoardUI:
     def __start_game(self):
         self.__update_timer()
         self.__pressed_buttons = []
+        self.__guessed_word = ''
+        self.current_word.config(text='Letters: ' + self.__guessed_word)
+        self.words_guessed.config(text='WORDS')
+        self.score.config(text='Score=' + str(self.__controller.score))
         self.start.config(text='START', command=self.__restart_game,
                           state=DISABLED)
         for i, btn_row in enumerate(self.buttons):
