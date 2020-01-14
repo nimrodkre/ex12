@@ -44,10 +44,12 @@ class BoardUI:
         self.__words_guessed = None
         self.__timer = None
         self.__undo = None
+        self.__pressed_buttons = []
+        self.__msg_lbl = None
 
         self.__prev_i = -1
         self.__prev_j = -1
-        self.__guess = ''
+        self.__guessed_word = ''
         self.__controller.times_up_sub(self.__end_game)
         self.__root.title('Crazy Boggle')
 
@@ -99,10 +101,6 @@ class BoardUI:
     def buttons(self, buttons):
         self.__buttons = buttons
 
-    @quit.setter
-    def quit(self, quit):
-        self.__quit = quit
-
     @guess.setter
     def guess(self, guess):
         self.__guess = guess
@@ -147,9 +145,8 @@ class BoardUI:
         :param j: the location of the button pressed
         :return: None
         """
-        self.current_word.configure(state='normal')
-        self.current_word.insert(tkinter.INSERT, self.buttons[i][j]['text'])
-        self.current_word.configure(state='disabled')
+        self.__guessed_word += self.buttons[i][j]['text']
+        self.current_word.config(text=self.__guessed_word)
         self.__disable_buttons(i, j)
         self.__enable_buttons(i, j)
         self.pressed_buttons.append(self.buttons[i][j])
@@ -161,8 +158,8 @@ class BoardUI:
         :param col: col
         :return: None
         """
-        for i in range(len(self.board)):
-            for j in range(len(self.board[0])):
+        for i in range(len(self.__controller.board)):
+            for j in range(len(self.__controller.board[0])):
                 if math.fabs(i - row) > 1 or math.fabs(j - col) > 1:
                     self.buttons[i][j]['state'] = 'disabled'
         self.buttons[row][col]['state'] = 'disabled'
@@ -174,8 +171,8 @@ class BoardUI:
         :param col:
         :return:
         """
-        for i in range(len(self.board)):
-            for j in range(len(self.board[0])):
+        for i in range(len(self.__controller.board)):
+            for j in range(len(self.__controller.board[0])):
                 if not (math.fabs(i - row) > 1 or math.fabs(j - col) > 1) and \
                         self.buttons[i][
                             j] not in self.pressed_buttons and not (
@@ -214,25 +211,21 @@ class BoardUI:
                                columnspan=CURRENT_LETTERS_COLSPAN)
 
     def build_quit(self):
-        self.quit_btn = tkinter.Button(text="QUIT", height=1, width=15,
+        self.__quit = tkinter.Button(text="QUIT", height=1, width=15,
                                        bg="red",
                                        command=quit)
-        self.quit_btn.grid(row=QUIT_ROW, column=QUIT_COL)
+        self.__quit.grid(row=QUIT_ROW, column=QUIT_COL)
 
     def build_guess(self):
-        self.guess = tkinter.Button(text="GUESS", height=1, width=15,
+        self.__guess = tkinter.Button(text="GUESS", height=1, width=15,
                                         command=self.__guess_word)
-        self.guess.grid(row=GUESS_ROW, column=GUESS_COL)
+        self.__guess.grid(row=GUESS_ROW, column=GUESS_COL)
 
     def __del_last_letter(self):
-        self.current_word.configure(state='normal')
-        word = self.current_word.get("1.0", 'end')
-        new_word = word[:len(word) - 2]
-        self.current_word.delete("1.0", "end")
-        self.current_word.insert("1.0", new_word)
-        self.current_word.configure(state='disabled')
+        self.__guessed_word = self.__guessed_word[:-1]
+        self.current_word.config(text=self.__guessed_word)
 
-    def __undo_button(self, button):
+    def __undo_button(self):
         if len(self.pressed_buttons) == 0:
             for i in range(len(self.buttons)):
                 for j in range(len(self.buttons[0])):
@@ -246,7 +239,7 @@ class BoardUI:
         if len(self.pressed_buttons) == 0:
             return
         self.__del_last_letter()
-        self.__undo_button(self.pressed_buttons.pop())
+        self.__undo_button()
 
     def build_undo(self):
         self.undo = tkinter.Button(text="UNDO", height=1, width=10,
@@ -295,21 +288,22 @@ class BoardUI:
         self.build_msg_label()
 
     def __guess_word(self):
-        guess_word_msg = self.__controller.guess_word(self.__guess)
+        guess_word_msg = self.__controller.guess_word(self.__guessed_word)
         if guess_word_msg is None:
             guessed_words = 'WORDS\n' + '\n'.join(
                 self.__controller.guessed_words)
             self.words_guessed.config(text=guessed_words)
             guess_word_msg = 'Nice one!'
-        self.score_tb.config(text='Score=' + str(self.__controller.score))
+        self.score.config(text='Score=' + str(self.__controller.score))
         self.__prev_i = -1
         self.__prev_j = -1
         self.__guess = ''
-        self.current_word.configure(text='Letters: ' + self.__guess)
+        self.current_word.configure(text='Letters: ' + self.__guessed_word)
         self.__msg_lbl.configure(text=guess_word_msg)
 
     def __start_game(self):
         self.__update_timer()
+        self.__pressed_buttons = []
         self.start.config(text='START', command=self.__restart_game,
                           state=DISABLED)
         for i, btn_row in enumerate(self.buttons):
