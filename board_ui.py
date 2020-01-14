@@ -1,5 +1,5 @@
 import tkinter
-from tkinter import DISABLED, NORMAL
+from tkinter import DISABLED, NORMAL, ttk, INSERT, N, S, W, E, END
 from controller import Controller
 import math
 
@@ -44,8 +44,10 @@ class BoardUI:
         self.__words_guessed = None
         self.__timer = None
         self.__undo = None
+        self.__scrollbar_list = None
         self.__pressed_buttons = []
         self.__msg_lbl = None
+        self.___scrollbar_list = None
 
         self.__guessed_word = ''
         self.__controller.times_up_sub(self.__end_game)
@@ -103,43 +105,40 @@ class BoardUI:
     def build_buttons(self):
         for i in range(len(self.__controller.board)):
             self.__buttons.append([tkinter.Button(self.__root,
-                                                  text='X'
-                                                  , height=3, width=7,
-                                                  command=self.make_callback(i,
-                                                                             j),
-                                                  padx=10, state=DISABLED)
-                                   for j in
-                                   range(len(self.__controller.board[0]))])
+                                                text='X'
+                                                , height=3, width=7,
+                                                command=self.make_callback(i,
+                                                                           j),
+                                                padx=10, state=DISABLED)
+                                 for j in
+                                 range(len(self.__controller.board[0]))])
         for i in range(len(self.__buttons)):
             for j in range(len(self.__buttons[0])):
                 BoardUI.button_coordinates[self.__buttons[i][j]] = (i, j)
                 self.__buttons[i][j].grid(row=i + BUTTONS_START_ROW,
-                                          column=j + BUTTONS_START_COL)
+                                        column=j + BUTTONS_START_COL)
 
     def build_score(self):
-        self.__score = tkinter.Label(self.__root, height=3, width=14,
-                                     bg="gray",
-                                     text="Score=0")
+        self.__score = tkinter.Label(self.__root, height=3, width=14, bg="gray",
+                                      text="Score=0")
         self.__score.grid(row=SCORE_ROW, column=SCORE_COL)
 
     def build_current_word(self):
         self.__current_word = tkinter.Label(self.__root, height=1, width=30,
-                                            bg="gray", text="Letters:",
-                                            anchor='w')
+                                          bg="gray", text="Letters:", anchor='w')
         self.__current_word.grid(row=CURRENT_LETTERS_ROW,
-                                 column=CURRENT_LETTERS_COL,
-                                 columnspan=CURRENT_LETTERS_COLSPAN)
+                               column=CURRENT_LETTERS_COL,
+                               columnspan=CURRENT_LETTERS_COLSPAN)
 
     def build_quit(self):
         self.__quit = tkinter.Button(text="QUIT", height=1, width=15,
-                                     bg="red",
-                                     command=quit)
+                                       bg="red",
+                                       command=quit)
         self.__quit.grid(row=QUIT_ROW, column=QUIT_COL)
 
     def build_guess(self):
         self.__guess = tkinter.Button(text="GUESS", height=1, width=15,
-                                      command=self.__guess_word,
-                                      state=DISABLED)
+                                        command=self.__guess_word, state=DISABLED)
         self.__guess.grid(row=GUESS_ROW, column=GUESS_COL)
 
     def __del_last_letter(self):
@@ -168,17 +167,27 @@ class BoardUI:
 
     def build_undo(self):
         self.__undo = tkinter.Button(text="UNDO", height=1, width=10,
-                                     command=self.__undo_callback,
-                                     state=DISABLED)
+                                   command=self.__undo_callback, state=DISABLED)
         self.__undo.grid(row=UNDO_ROW, column=UNDO_COL)
 
     def build_words_guessed(self):
-        self.__words_guessed = tkinter.Label(self.__root, height=10, width=14,
-                                             bg="gray", text="WORDS",
-                                             anchor='n')
-        self.__words_guessed.grid(row=WORDS_ROW,
-                                  column=WORDS_COL,
-                                  rowspan=WORDS_ROWSPAN)
+        self.__words_guessed = tkinter.Label(self.__root, height=2, width=14,
+                                           bg="gray", text="WORDS", anchor='n')
+        self.__scrollbar_list = tkinter.Scrollbar(self.__root)
+
+        self.__words_guessed = tkinter.Text(self.__root, width=10, height=10)
+        self.__words_guessed.insert(INSERT, 'WORDS')
+        self.__words_guessed.config(state=DISABLED)
+        self.__words_guessed.grid(row=WORDS_ROW, column=WORDS_COL, rowspan=WORDS_ROWSPAN)
+        self.__scrollbar_list.grid(column=WORDS_COL, row=WORDS_ROW, rowspan=WORDS_ROWSPAN, sticky=N + S + E)
+
+
+        # attach listbox to scrollbar
+        self.__words_guessed.config(yscrollcommand=self.__scrollbar_list.set)
+        self.__scrollbar_list.config(command=self.__words_guessed.yview)
+        # self.__words_guessed.grid(row=WORDS_ROW,
+        #                         column=WORDS_COL,
+        #                         rowspan=WORDS_ROWSPAN)
 
     def build_timer(self):
         self.__timer = tkinter.Label(self.__root, height=1, width=10,
@@ -194,8 +203,7 @@ class BoardUI:
 
     def build_msg_label(self):
         self.__msg_lbl = tkinter.Label(text='', anchor='w')
-        self.__msg_lbl.grid(row=MSG_LBL_ROW, column=MSG_LBL_COL,
-                            columnspan=MSG_LBL_COLSPAN)
+        self.__msg_lbl.grid(row=MSG_LBL_ROW, column=MSG_LBL_COL, columnspan=MSG_LBL_COLSPAN)
 
     def __update_timer(self):
         self.__controller.decrease_time()
@@ -220,7 +228,11 @@ class BoardUI:
         if guess_word_msg is None:
             guessed_words = 'WORDS\n' + '\n'.join(
                 self.__controller.guessed_words)
-            self.__words_guessed.config(text=guessed_words)
+            self.__words_guessed.config(state=NORMAL)
+            self.__words_guessed.delete(1.0, END)
+            self.__words_guessed.insert(INSERT, guessed_words)
+            self.__words_guessed.config(state=DISABLED)
+
             guess_word_msg = 'Nice one!'
         self.__score.config(text='Score=' + str(self.__controller.score))
         self.__guessed_word = ''
@@ -237,7 +249,10 @@ class BoardUI:
         self.__pressed_buttons = []
         self.__guessed_word = ''
         self.__current_word.config(text='Letters: ' + self.__guessed_word)
-        self.__words_guessed.config(text='WORDS')
+        self.__words_guessed.config(state=NORMAL)
+        self.__words_guessed.delete(1.0, END)
+        self.__words_guessed.insert(INSERT, 'WORDS')
+        self.__words_guessed.config(state=DISABLED)
         self.__score.config(text='Score=' + str(self.__controller.score))
         self.start.config(text='START', command=self.__restart_game,
                           state=DISABLED)
