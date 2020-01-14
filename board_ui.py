@@ -161,8 +161,8 @@ class BoardUI:
         for i in range(len(self.__controller.board)):
             for j in range(len(self.__controller.board[0])):
                 if math.fabs(i - row) > 1 or math.fabs(j - col) > 1:
-                    self.buttons[i][j]['state'] = 'disabled'
-        self.buttons[row][col]['state'] = 'disabled'
+                    self.buttons[i][j].config(state=DISABLED)
+        self.buttons[row][col].config(state=DISABLED)
 
     def __enable_buttons(self, row, col):
         """
@@ -177,7 +177,7 @@ class BoardUI:
                         self.buttons[i][
                             j] not in self.pressed_buttons and not (
                         i == row and j == col):
-                    self.buttons[i][j]['state'] = 'normal'
+                    self.buttons[i][j].config(state=NORMAL)
 
     def make_callback(self, i, j):
         return lambda: self.__button_callback(i, j)
@@ -218,7 +218,7 @@ class BoardUI:
 
     def build_guess(self):
         self.__guess = tkinter.Button(text="GUESS", height=1, width=15,
-                                        command=self.__guess_word)
+                                        command=self.__guess_word, state=DISABLED)
         self.__guess.grid(row=GUESS_ROW, column=GUESS_COL)
 
     def __del_last_letter(self):
@@ -226,12 +226,13 @@ class BoardUI:
         self.current_word.config(text='Letters: ' + self.__guessed_word)
 
     def __undo_button(self):
+        self.pressed_buttons.pop()
         if len(self.pressed_buttons) == 0:
             for i in range(len(self.buttons)):
                 for j in range(len(self.buttons[0])):
-                    self.buttons[i][j]['state'] = 'normal'
+                    self.buttons[i][j].config(state=NORMAL)
             return
-        loc = BoardUI.button_coordinates[self.pressed_buttons[-1]]
+        loc = BoardUI.button_coordinates[self.__pressed_buttons[-1]]
         self.__disable_buttons(*loc)
         self.__enable_buttons(*loc)
 
@@ -243,7 +244,7 @@ class BoardUI:
 
     def build_undo(self):
         self.undo = tkinter.Button(text="UNDO", height=1, width=10,
-                                   command=self.__undo_callback)
+                                   command=self.__undo_callback, state=DISABLED)
         self.undo.grid(row=UNDO_ROW, column=UNDO_COL)
 
     def build_words_guessed(self):
@@ -319,6 +320,8 @@ class BoardUI:
             for j, btn in enumerate(btn_row):
                 btn.config(text=self.__controller.get_letter(i, j),
                            state=NORMAL)
+        self.__guess.config(state=NORMAL)
+        self.__undo.config(state=NORMAL)
 
     def __end_game(self):
         self.start.config(text='RESTART', command=self.__restart_game,
@@ -327,6 +330,8 @@ class BoardUI:
         for i, btn_row in enumerate(self.buttons):
             for j, btn in enumerate(btn_row):
                 btn.config(state=DISABLED)
+        self.__guess.config(state=DISABLED)
+        self.__undo.config(state=DISABLED)
 
     def __restart_game(self):
         self.__controller.restart_game()
