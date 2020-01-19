@@ -101,19 +101,32 @@ class BoardUI:
                     self.__buttons[i][j].config(state=NORMAL)
 
     def make_callback(self, i, j):
+        """
+        Makes the function for the button callback, in order for each paramete
+        to be different
+        :param i: coordinate row for the callback
+        :param j: coordinate col
+        :return: function of callback
+        """
         return lambda: self.__button_callback(i, j)
 
     def build_buttons(self):
+        """
+        builds all buttons on the screen
+        :return:
+        """
         for i in range(len(self.__controller.board)):
             self.__buttons.append([tkinter.Button(self.__root,
                                                   text='X'
                                                   , height=3, width=10,
-                                                  command=self.make_callback(i,
-                                                                             j),
+                                                  command=self.make_callback(
+                                                      i,
+                                                      j),
                                                   padx=10, state=DISABLED,
                                                   bg="turquoise")
                                    for j in
                                    range(len(self.__controller.board[0]))])
+        # Add buttons to screen
         for i in range(len(self.__buttons)):
             for j in range(len(self.__buttons[0])):
                 BoardUI.button_coordinates[self.__buttons[i][j]] = (i, j)
@@ -121,12 +134,20 @@ class BoardUI:
                                           column=j + BUTTONS_START_COL)
 
     def build_score(self):
+        """
+        builds score label
+        :return: None
+        """
         self.__score = tkinter.Label(self.__root, height=3, width=18,
                                      bg="light blue",
                                      text="Score=0")
         self.__score.grid(row=SCORE_ROW, column=SCORE_COL)
 
     def build_current_word(self):
+        """
+        builds a label which holds the current letters chosen by the user
+        :return:
+        """
         self.__current_word = tkinter.Label(self.__root, height=1, width=39,
                                             bg="light blue", text="Letters:",
                                             anchor='w')
@@ -135,18 +156,31 @@ class BoardUI:
                                  columnspan=CURRENT_LETTERS_COLSPAN)
 
     def build_quit(self):
+        """
+        builds quit button
+        :return:
+        """
         self.__quit = tkinter.Button(text="QUIT", height=1, width=16,
                                      bg="salmon1",
                                      command=quit)
         self.__quit.grid(row=QUIT_ROW, column=QUIT_COL)
 
     def build_guess(self):
+        """
+        builds guess button
+        :return:
+        """
         self.__guess = tkinter.Button(text="GUESS", height=1, width=16,
                                       command=self.__guess_word,
                                       state=DISABLED, bg="plum2")
         self.__guess.grid(row=GUESS_ROW, column=GUESS_COL)
 
     def __del_last_letter(self):
+        """
+        removes the last letter from the current guess, function used in undo
+        :return:
+        """
+        # Qu always come together
         if self.__guessed_word.upper().endswith('QU'):
             self.__guessed_word = self.__guessed_word[:-2]
         else:
@@ -154,6 +188,11 @@ class BoardUI:
         self.__current_word.config(text='Letters: ' + self.__guessed_word)
 
     def __undo_button(self):
+        """
+        in charge of undoing the last steps.
+        Uses stack to find out which was the last button clicked
+        :return:
+        """
         self.__pressed_buttons.pop()
         if len(self.__pressed_buttons) == 0:
             for i in range(len(self.__buttons)):
@@ -165,19 +204,34 @@ class BoardUI:
         self.__enable_buttons(*loc)
 
     def __undo_callback(self):
+        """
+        in charge of what to do when undo is pressed
+        :return:
+        """
         if len(self.__pressed_buttons) == 0:
             return
         self.__del_last_letter()
         self.__undo_button()
 
     def build_undo(self):
+        """
+        builds undo button
+        :return:
+        """
         self.__undo = tkinter.Button(text="UNDO", height=1, width=10,
                                      command=self.__undo_callback,
                                      state=DISABLED, bg="plum2")
         self.__undo.grid(row=UNDO_ROW, column=UNDO_COL)
 
     def build_words_guessed(self):
-        self.__words_guessed = tkinter.Text(self.__root, height=10, width=20, bg="light blue")
+        """
+        builds a textbox with all words guessed.
+        Also added scroll bar in order to allow more words to be put on the
+        textbox.
+        :return:
+        """
+        self.__words_guessed = tkinter.Text(self.__root, height=10, width=20,
+                                            bg="light blue")
         self.__words_guessed.grid(row=WORDS_ROW,
                                   column=WORDS_COL,
                                   rowspan=WORDS_ROWSPAN)
@@ -189,7 +243,8 @@ class BoardUI:
 
         self.__words_guessed.insert(INSERT, 'WORDS', 'center')
         self.__words_guessed.config(state=DISABLED)
-        self.__scrollbar_list.grid(column=WORDS_COL, row=WORDS_ROW, rowspan=WORDS_ROWSPAN, sticky=N + S + E)
+        self.__scrollbar_list.grid(column=WORDS_COL, row=WORDS_ROW,
+                                   rowspan=WORDS_ROWSPAN, sticky=N + S + E)
 
         # attach listbox to scrollbar
         self.__words_guessed.config(yscrollcommand=self.__scrollbar_list.set)
@@ -205,7 +260,8 @@ class BoardUI:
 
     def build_start(self):
         self.start = tkinter.Button(text="START", height=1, width=10,
-                                    command=self.__start_game, bg="chartreuse2")
+                                    command=self.__start_game,
+                                    bg="chartreuse2")
         self.start.grid(row=START_BTN_ROW, column=START_BTN_COL)
 
     def build_msg_label(self):
@@ -253,6 +309,11 @@ class BoardUI:
                 btn.config(state=NORMAL)
 
     def __start_game(self):
+        """
+        resets all components of the game in order for us to start
+        all over again
+        :return:
+        """
         self.__update_timer()
         self.__pressed_buttons = []
         self.__guessed_word = ''
@@ -282,6 +343,10 @@ class BoardUI:
         self.__undo.config(state=DISABLED)
 
     def __restart_game(self):
+        """
+        starts the game from brand new
+        :return:
+        """
         self.__controller.restart_game()
         self.__start_game()
         self.__msg_lbl.config(text='')
