@@ -62,9 +62,6 @@ class BoardUI:
         self.__root.title('Crazy Boggle')
         self.__root.configure(bg="azure")
 
-        # Make the board non resizable
-        self.__root.resizable(False, False)
-
     @property
     def root(self):
         """
@@ -226,9 +223,7 @@ class BoardUI:
         """
         self.__pressed_buttons.pop()
         if len(self.__pressed_buttons) == 0:
-            for i in range(len(self.__buttons)):
-                for j in range(len(self.__buttons[0])):
-                    self.__buttons[i][j].config(state=NORMAL)
+            self.__enable_all_buttons()
             return
         loc = BoardUI.button_coordinates[self.__pressed_buttons[-1]]
         self.__disable_buttons(*loc)
