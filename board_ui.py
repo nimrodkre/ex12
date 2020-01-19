@@ -23,8 +23,8 @@ TIMER_ROW = 5
 TIMER_COL = 1
 TIMER_COLSPAN = 1
 MSG_LBL_ROW = 6
-MSG_LBL_COL = 2
-MSG_LBL_COLSPAN = 3
+MSG_LBL_COL = 0
+MSG_LBL_COLSPAN = 5
 START_BTN_ROW = 5
 START_BTN_COL = 4
 
@@ -106,7 +106,7 @@ class BoardUI:
         for i in range(len(self.__controller.board)):
             self.__buttons.append([tkinter.Button(self.__root,
                                                   text='X'
-                                                  , height=3, width=7,
+                                                  , height=3, width=10,
                                                   command=self.make_callback(i,
                                                                              j),
                                                   padx=10, state=DISABLED,
@@ -210,9 +210,9 @@ class BoardUI:
         self.start.grid(row=START_BTN_ROW, column=START_BTN_COL)
 
     def build_msg_label(self):
-        self.__msg_lbl = tkinter.Label(text='', anchor='w')
+        self.__msg_lbl = tkinter.Label(text='', bg="azure")
         self.__msg_lbl.grid(row=MSG_LBL_ROW, column=MSG_LBL_COL,
-                            columnspan=MSG_LBL_COLSPAN)
+                            columnspan=MSG_LBL_COLSPAN, sticky="NSEW")
 
     def __update_timer(self):
         self.__controller.decrease_time()
