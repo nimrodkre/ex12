@@ -59,8 +59,6 @@ class BoardUI:
         self.__msg_lbl = None
         self.__guessed_word = ''
         self.__controller.times_up_sub(self.__end_game)
-        self.__root.title('Crazy Boggle')
-        self.__root.configure(bg="azure")
 
     @property
     def root(self):
@@ -85,9 +83,9 @@ class BoardUI:
         self.__build_start()
         self.__build_timer()
         self.__build_msg_label()
-        self.__configure_window_()
+        self.__configure_window()
 
-    def __configure_window_(self):
+    def __configure_window(self):
         """
         Configure the window size and location
         :return: None
@@ -101,6 +99,9 @@ class BoardUI:
         x = (ws / 3)
         y = (hs / 3)
         self.__root.geometry('+%d+%d' % (x, y))
+
+        self.__root.title('Crazy Boggle')
+        self.__root.configure(bg="azure")
 
     def __button_callback(self, i, j):
         """
