@@ -85,6 +85,22 @@ class BoardUI:
         self.__build_start()
         self.__build_timer()
         self.__build_msg_label()
+        self.__configure_window_()
+
+    def __configure_window_(self):
+        """
+        Configure the window size and location
+        :return: None
+        """
+        # Make the board non resizable
+        self.__root.resizable(False, False)
+        # get screen width and height
+        ws = self.__root.winfo_screenwidth()  # width of the screen
+        hs = self.__root.winfo_screenheight()  # height of the screen
+        # calculate x and y coordinates for the Tk root window
+        x = (ws / 3)
+        y = (hs / 3)
+        self.__root.geometry('+%d+%d' % (x, y))
 
     def __button_callback(self, i, j):
         """
