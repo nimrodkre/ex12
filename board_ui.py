@@ -1,7 +1,7 @@
 import tkinter
-from tkinter import DISABLED, NORMAL, ttk, INSERT, N, S, W, E, END
-import board_bl_codes
+from tkinter import DISABLED, NORMAL, INSERT, N, S, E, W, END
 import math
+import board_bl_codes
 
 CURRENT_LETTERS_ROW = 0
 CURRENT_LETTERS_COL = 2
@@ -194,7 +194,7 @@ class BoardUI:
         """
         self.__current_word = tkinter.Label(self.__root, height=1, width=39,
                                             bg="light blue", text="Letters:",
-                                            anchor='w')
+                                            anchor=W)
         self.__current_word.grid(row=CURRENT_LETTERS_ROW,
                                  column=CURRENT_LETTERS_COL,
                                  columnspan=CURRENT_LETTERS_COLSPAN)
@@ -321,7 +321,7 @@ class BoardUI:
         """
         self.__msg_lbl = tkinter.Label(text='', bg="azure")
         self.__msg_lbl.grid(row=MSG_LBL_ROW, column=MSG_LBL_COL,
-                            columnspan=MSG_LBL_COLSPAN, sticky="NSEW")
+                            columnspan=MSG_LBL_COLSPAN, sticky=N + S + E + W)
 
     def __update_timer(self):
         """
