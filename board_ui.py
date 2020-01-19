@@ -125,6 +125,8 @@ class BoardUI:
         :param col: col
         :return: None
         """
+        # TODO: Iterate over buttons instead of board
+        # TODO: Use enumerate for the greater good
         for i in range(len(self.__controller.board)):
             for j in range(len(self.__controller.board[0])):
                 if math.fabs(i - row) > 1 or math.fabs(j - col) > 1:
@@ -138,6 +140,7 @@ class BoardUI:
         :param col:
         :return:
         """
+        # TODO: Iterate over buttons instead of board
         for i in range(len(self.__controller.board)):
             for j in range(len(self.__controller.board[0])):
                 if not (math.fabs(i - row) > 1 or math.fabs(j - col) > 1) and \
