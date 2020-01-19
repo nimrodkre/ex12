@@ -176,13 +176,17 @@ class BoardUI:
         self.__undo.grid(row=UNDO_ROW, column=UNDO_COL)
 
     def build_words_guessed(self):
-        self.__words_guessed = tkinter.Text(self.__root, height=10, width=14, bg="light blue")
+        self.__words_guessed = tkinter.Text(self.__root, height=10, width=20, bg="light blue")
         self.__words_guessed.grid(row=WORDS_ROW,
                                   column=WORDS_COL,
                                   rowspan=WORDS_ROWSPAN)
+
+        self.__words_guessed.tag_config('center', justify='center')
+        self.__words_guessed.tag_add("center", "1.0", "end")
+
         self.__scrollbar_list = tkinter.Scrollbar(self.__root)
 
-        self.__words_guessed.insert(INSERT, 'WORDS')
+        self.__words_guessed.insert(INSERT, 'WORDS', 'center', 'center')
         self.__words_guessed.config(state=DISABLED)
         self.__scrollbar_list.grid(column=WORDS_COL, row=WORDS_ROW, rowspan=WORDS_ROWSPAN, sticky=N + S + E)
 
@@ -233,7 +237,7 @@ class BoardUI:
                 self.__controller.guessed_words)
             self.__words_guessed.config(state=NORMAL)
             self.__words_guessed.delete(1.0, END)
-            self.__words_guessed.insert(INSERT, guessed_words)
+            self.__words_guessed.insert(INSERT, guessed_words, 'center')
             self.__words_guessed.config(state=DISABLED)
 
             guess_word_msg = 'Nice one!'
@@ -254,7 +258,7 @@ class BoardUI:
         self.__current_word.config(text='Letters: ' + self.__guessed_word)
         self.__words_guessed.config(state=NORMAL)
         self.__words_guessed.delete(1.0, END)
-        self.__words_guessed.insert(INSERT, 'WORDS')
+        self.__words_guessed.insert(INSERT, 'WORDS', 'center')
         self.__words_guessed.config(state=DISABLED)
         self.__score.config(text='Score=' + str(self.__controller.score))
         self.start.config(text='START', command=self.__restart_game,
