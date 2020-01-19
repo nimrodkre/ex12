@@ -176,15 +176,12 @@ class BoardUI:
         self.__undo.grid(row=UNDO_ROW, column=UNDO_COL)
 
     def build_words_guessed(self):
-        self.__words_guessed = tkinter.Label(self.__root, height=10, width=14,
-                                             bg="light blue", text="WORDS",
-                                             anchor='n')
+        self.__words_guessed = tkinter.Text(self.__root, height=10, width=14, bg="light blue")
         self.__words_guessed.grid(row=WORDS_ROW,
                                   column=WORDS_COL,
                                   rowspan=WORDS_ROWSPAN)
         self.__scrollbar_list = tkinter.Scrollbar(self.__root)
 
-        self.__words_guessed = tkinter.Text(self.__root, width=10, height=10)
         self.__words_guessed.insert(INSERT, 'WORDS')
         self.__words_guessed.config(state=DISABLED)
         self.__scrollbar_list.grid(column=WORDS_COL, row=WORDS_ROW, rowspan=WORDS_ROWSPAN, sticky=N + S + E)
@@ -192,9 +189,6 @@ class BoardUI:
         # attach listbox to scrollbar
         self.__words_guessed.config(yscrollcommand=self.__scrollbar_list.set)
         self.__scrollbar_list.config(command=self.__words_guessed.yview)
-        # self.__words_guessed.grid(row=WORDS_ROW,
-        #                         column=WORDS_COL,
-        #                         rowspan=WORDS_ROWSPAN)
 
     def build_timer(self):
         self.__timer = tkinter.Label(self.__root, height=1, width=10,
