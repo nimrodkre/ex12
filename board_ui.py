@@ -47,11 +47,11 @@ class BoardUI:
         self.__scrollbar_list = None
         self.__pressed_buttons = []
         self.__msg_lbl = None
-        self.___scrollbar_list = None
 
         self.__guessed_word = ''
         self.__controller.times_up_sub(self.__end_game)
         self.__root.title('Crazy Boggle')
+        self.__root.configure(bg="azure")
 
     @property
     def root(self):
@@ -105,40 +105,44 @@ class BoardUI:
     def build_buttons(self):
         for i in range(len(self.__controller.board)):
             self.__buttons.append([tkinter.Button(self.__root,
-                                                text='X'
-                                                , height=3, width=7,
-                                                command=self.make_callback(i,
-                                                                           j),
-                                                padx=10, state=DISABLED)
-                                 for j in
-                                 range(len(self.__controller.board[0]))])
+                                                  text='X'
+                                                  , height=3, width=7,
+                                                  command=self.make_callback(i,
+                                                                             j),
+                                                  padx=10, state=DISABLED,
+                                                  bg="turquoise")
+                                   for j in
+                                   range(len(self.__controller.board[0]))])
         for i in range(len(self.__buttons)):
             for j in range(len(self.__buttons[0])):
                 BoardUI.button_coordinates[self.__buttons[i][j]] = (i, j)
                 self.__buttons[i][j].grid(row=i + BUTTONS_START_ROW,
-                                        column=j + BUTTONS_START_COL)
+                                          column=j + BUTTONS_START_COL)
 
     def build_score(self):
-        self.__score = tkinter.Label(self.__root, height=3, width=14, bg="gray",
-                                      text="Score=0")
+        self.__score = tkinter.Label(self.__root, height=3, width=14,
+                                     bg="light blue",
+                                     text="Score=0")
         self.__score.grid(row=SCORE_ROW, column=SCORE_COL)
 
     def build_current_word(self):
         self.__current_word = tkinter.Label(self.__root, height=1, width=30,
-                                          bg="gray", text="Letters:", anchor='w')
+                                            bg="light blue", text="Letters:",
+                                            anchor='w')
         self.__current_word.grid(row=CURRENT_LETTERS_ROW,
-                               column=CURRENT_LETTERS_COL,
-                               columnspan=CURRENT_LETTERS_COLSPAN)
+                                 column=CURRENT_LETTERS_COL,
+                                 columnspan=CURRENT_LETTERS_COLSPAN)
 
     def build_quit(self):
         self.__quit = tkinter.Button(text="QUIT", height=1, width=15,
-                                       bg="red",
-                                       command=quit)
+                                     bg="salmon1",
+                                     command=quit)
         self.__quit.grid(row=QUIT_ROW, column=QUIT_COL)
 
     def build_guess(self):
         self.__guess = tkinter.Button(text="GUESS", height=1, width=15,
-                                        command=self.__guess_word, state=DISABLED)
+                                      command=self.__guess_word,
+                                      state=DISABLED, bg="plum2")
         self.__guess.grid(row=GUESS_ROW, column=GUESS_COL)
 
     def __del_last_letter(self):
@@ -167,20 +171,23 @@ class BoardUI:
 
     def build_undo(self):
         self.__undo = tkinter.Button(text="UNDO", height=1, width=10,
-                                   command=self.__undo_callback, state=DISABLED)
+                                     command=self.__undo_callback,
+                                     state=DISABLED, bg="plum2")
         self.__undo.grid(row=UNDO_ROW, column=UNDO_COL)
 
     def build_words_guessed(self):
-        self.__words_guessed = tkinter.Label(self.__root, height=2, width=14,
-                                           bg="gray", text="WORDS", anchor='n')
+        self.__words_guessed = tkinter.Label(self.__root, height=10, width=14,
+                                             bg="light blue", text="WORDS",
+                                             anchor='n')
+        self.__words_guessed.grid(row=WORDS_ROW,
+                                  column=WORDS_COL,
+                                  rowspan=WORDS_ROWSPAN)
         self.__scrollbar_list = tkinter.Scrollbar(self.__root)
 
         self.__words_guessed = tkinter.Text(self.__root, width=10, height=10)
         self.__words_guessed.insert(INSERT, 'WORDS')
         self.__words_guessed.config(state=DISABLED)
-        self.__words_guessed.grid(row=WORDS_ROW, column=WORDS_COL, rowspan=WORDS_ROWSPAN)
         self.__scrollbar_list.grid(column=WORDS_COL, row=WORDS_ROW, rowspan=WORDS_ROWSPAN, sticky=N + S + E)
-
 
         # attach listbox to scrollbar
         self.__words_guessed.config(yscrollcommand=self.__scrollbar_list.set)
@@ -191,19 +198,21 @@ class BoardUI:
 
     def build_timer(self):
         self.__timer = tkinter.Label(self.__root, height=1, width=10,
-                                     text=str(self.__controller.time)[2:])
+                                     text=str(self.__controller.time)[2:],
+                                     bg="light blue")
         self.__timer.grid(row=TIMER_ROW,
                           column=TIMER_COL,
                           rowspan=TIMER_COLSPAN)
 
     def build_start(self):
         self.start = tkinter.Button(text="START", height=1, width=10,
-                                    command=self.__start_game)
+                                    command=self.__start_game, bg="chartreuse2")
         self.start.grid(row=START_BTN_ROW, column=START_BTN_COL)
 
     def build_msg_label(self):
         self.__msg_lbl = tkinter.Label(text='', anchor='w')
-        self.__msg_lbl.grid(row=MSG_LBL_ROW, column=MSG_LBL_COL, columnspan=MSG_LBL_COLSPAN)
+        self.__msg_lbl.grid(row=MSG_LBL_ROW, column=MSG_LBL_COL,
+                            columnspan=MSG_LBL_COLSPAN)
 
     def __update_timer(self):
         self.__controller.decrease_time()
