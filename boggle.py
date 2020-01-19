@@ -37,6 +37,6 @@ def load_words(words_file=WORDS_FILE):
 
 
 if __name__ == "__main__":
-    words = load_words()
-    boggle_manager = BoggleGameManager(words)
+    valid_words = load_words()
+    boggle_manager = BoggleGameManager(valid_words)
     boggle_manager.start_game()
