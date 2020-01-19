@@ -36,6 +36,7 @@ BAD_GUESS_CODE_TO_MSG = {
 
 
 class BoardUI:
+    # TODO: Create a class member
     button_coordinates = {}
 
     def __init__(self, controller):
