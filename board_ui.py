@@ -120,13 +120,13 @@ class BoardUI:
                                           column=j + BUTTONS_START_COL)
 
     def build_score(self):
-        self.__score = tkinter.Label(self.__root, height=3, width=14,
+        self.__score = tkinter.Label(self.__root, height=3, width=18,
                                      bg="light blue",
                                      text="Score=0")
         self.__score.grid(row=SCORE_ROW, column=SCORE_COL)
 
     def build_current_word(self):
-        self.__current_word = tkinter.Label(self.__root, height=1, width=30,
+        self.__current_word = tkinter.Label(self.__root, height=1, width=39,
                                             bg="light blue", text="Letters:",
                                             anchor='w')
         self.__current_word.grid(row=CURRENT_LETTERS_ROW,
@@ -134,13 +134,13 @@ class BoardUI:
                                  columnspan=CURRENT_LETTERS_COLSPAN)
 
     def build_quit(self):
-        self.__quit = tkinter.Button(text="QUIT", height=1, width=15,
+        self.__quit = tkinter.Button(text="QUIT", height=1, width=16,
                                      bg="salmon1",
                                      command=quit)
         self.__quit.grid(row=QUIT_ROW, column=QUIT_COL)
 
     def build_guess(self):
-        self.__guess = tkinter.Button(text="GUESS", height=1, width=15,
+        self.__guess = tkinter.Button(text="GUESS", height=1, width=16,
                                       command=self.__guess_word,
                                       state=DISABLED, bg="plum2")
         self.__guess.grid(row=GUESS_ROW, column=GUESS_COL)
@@ -186,7 +186,7 @@ class BoardUI:
 
         self.__scrollbar_list = tkinter.Scrollbar(self.__root)
 
-        self.__words_guessed.insert(INSERT, 'WORDS', 'center', 'center')
+        self.__words_guessed.insert(INSERT, 'WORDS', 'center')
         self.__words_guessed.config(state=DISABLED)
         self.__scrollbar_list.grid(column=WORDS_COL, row=WORDS_ROW, rowspan=WORDS_ROWSPAN, sticky=N + S + E)
 
@@ -195,7 +195,7 @@ class BoardUI:
         self.__scrollbar_list.config(command=self.__words_guessed.yview)
 
     def build_timer(self):
-        self.__timer = tkinter.Label(self.__root, height=1, width=10,
+        self.__timer = tkinter.Label(self.__root, height=1, width=12,
                                      text=str(self.__controller.time)[2:],
                                      bg="light blue")
         self.__timer.grid(row=TIMER_ROW,
