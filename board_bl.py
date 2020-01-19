@@ -48,10 +48,12 @@ class BoardBL:
         :param word: the letters to check
         :return: score to give if the word is good, else -1
         """
+        # TODO: CONSTANTS FOR THE STRINGS?
         if word == '':
             return 'Come on, you can do better!'
         if word in self.__guessed_words:
             return 'Already guessed!'
+        # TODO: SADFADSF
         if word.upper() in self.__words:
             self.__guessed_words.add(word)
             if 'QU' in word.upper():

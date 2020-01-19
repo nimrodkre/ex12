@@ -303,6 +303,7 @@ class BoardUI:
         self.__current_word.config(text='Letters: ' + self.__guessed_word)
         self.__msg_lbl.config(text=guess_word_msg)
 
+        # TODO: Put as function
         self.__pressed_buttons = []
         for row in self.__buttons:
             for btn in row:
