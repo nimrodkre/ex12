@@ -32,7 +32,11 @@ START_BTN_COL = 4
 class BoardUI:
     button_coordinates = {}
 
-    def __init__(self, controller: Controller):
+    def __init__(self, controller):
+        """
+        Creates a new UI component for the Boggle games
+        :param controller: The games controller to activate the games logic
+        """
         self.__controller = controller
         self.__root = tkinter.Tk()
         self.__buttons = []
@@ -47,16 +51,37 @@ class BoardUI:
         self.__scrollbar_list = None
         self.__pressed_buttons = []
         self.__msg_lbl = None
-
         self.__guessed_word = ''
         self.__controller.times_up_sub(self.__end_game)
         self.__root.title('Crazy Boggle')
         self.__root.configure(bg="azure")
+
+        # Make the board non resizable
         self.__root.resizable(False, False)
 
     @property
     def root(self):
+        """
+        The root Tkinter object
+        :return: A tkinter.Tk() that holds the UI of the game
+        """
         return self.__root
+
+    def build_ui(self):
+        """
+        Builds the game's UI window
+        :return: None
+        """
+        self.__build_score()
+        self.__build_buttons()
+        self.__build_current_word()
+        self.__build_quit()
+        self.__build_guess()
+        self.__build_undo()
+        self.__build_words_guessed()
+        self.__build_start()
+        self.__build_timer()
+        self.__build_msg_label()
 
     def __button_callback(self, i, j):
         """
@@ -100,7 +125,7 @@ class BoardUI:
                         i == row and j == col):
                     self.__buttons[i][j].config(state=NORMAL)
 
-    def make_callback(self, i, j):
+    def __make_callback(self, i, j):
         """
         Makes the function for the button callback, in order for each paramete
         to be different
@@ -110,7 +135,7 @@ class BoardUI:
         """
         return lambda: self.__button_callback(i, j)
 
-    def build_buttons(self):
+    def __build_buttons(self):
         """
         builds all buttons on the screen
         :return:
@@ -119,7 +144,7 @@ class BoardUI:
             self.__buttons.append([tkinter.Button(self.__root,
                                                   text='X'
                                                   , height=3, width=10,
-                                                  command=self.make_callback(
+                                                  command=self.__make_callback(
                                                       i,
                                                       j),
                                                   padx=10, state=DISABLED,
@@ -133,7 +158,7 @@ class BoardUI:
                 self.__buttons[i][j].grid(row=i + BUTTONS_START_ROW,
                                           column=j + BUTTONS_START_COL)
 
-    def build_score(self):
+    def __build_score(self):
         """
         builds score label
         :return: None
@@ -143,7 +168,7 @@ class BoardUI:
                                      text="Score=0")
         self.__score.grid(row=SCORE_ROW, column=SCORE_COL)
 
-    def build_current_word(self):
+    def __build_current_word(self):
         """
         builds a label which holds the current letters chosen by the user
         :return:
@@ -155,7 +180,7 @@ class BoardUI:
                                  column=CURRENT_LETTERS_COL,
                                  columnspan=CURRENT_LETTERS_COLSPAN)
 
-    def build_quit(self):
+    def __build_quit(self):
         """
         builds quit button
         :return:
@@ -165,7 +190,7 @@ class BoardUI:
                                      command=quit)
         self.__quit.grid(row=QUIT_ROW, column=QUIT_COL)
 
-    def build_guess(self):
+    def __build_guess(self):
         """
         builds guess button
         :return:
@@ -213,7 +238,7 @@ class BoardUI:
         self.__del_last_letter()
         self.__undo_button()
 
-    def build_undo(self):
+    def __build_undo(self):
         """
         builds undo button
         :return:
@@ -223,7 +248,7 @@ class BoardUI:
                                      state=DISABLED, bg="plum2")
         self.__undo.grid(row=UNDO_ROW, column=UNDO_COL)
 
-    def build_words_guessed(self):
+    def __build_words_guessed(self):
         """
         builds a textbox with all words guessed.
         Also added scroll bar in order to allow more words to be put on the
@@ -250,7 +275,11 @@ class BoardUI:
         self.__words_guessed.config(yscrollcommand=self.__scrollbar_list.set)
         self.__scrollbar_list.config(command=self.__words_guessed.yview)
 
-    def build_timer(self):
+    def __build_timer(self):
+        """
+        Builds a label containing the timer component
+        :return: None
+        """
         self.__timer = tkinter.Label(self.__root, height=1, width=12,
                                      text=str(self.__controller.time)[2:],
                                      bg="light blue")
@@ -258,37 +287,46 @@ class BoardUI:
                           column=TIMER_COL,
                           rowspan=TIMER_COLSPAN)
 
-    def build_start(self):
+    def __build_start(self):
+        """
+        Build the start/restart button for the game
+        :return: None
+        """
         self.start = tkinter.Button(text="START", height=1, width=10,
                                     command=self.__start_game,
                                     bg="chartreuse2")
         self.start.grid(row=START_BTN_ROW, column=START_BTN_COL)
 
-    def build_msg_label(self):
+    def __build_msg_label(self):
+        """
+        Builds a label that holds an interactive message
+        :return: None
+        """
         self.__msg_lbl = tkinter.Label(text='', bg="azure")
         self.__msg_lbl.grid(row=MSG_LBL_ROW, column=MSG_LBL_COL,
                             columnspan=MSG_LBL_COLSPAN, sticky="NSEW")
 
     def __update_timer(self):
+        """
+        Updates the timer label every one second
+        :return: None
+        """
         self.__controller.decrease_time()
+        # Take only the minutes and seconds from the timer
         self.__timer.config(text=str(self.__controller.time)[2:])
+
+        # Keep updating every second as long as the time is not up
         if not self.__controller.is_time_up():
             self.__root.after(1000, self.__update_timer)
 
-    def build_ui(self):
-        self.build_score()
-        self.build_buttons()
-        self.build_current_word()
-        self.build_quit()
-        self.build_guess()
-        self.build_undo()
-        self.build_words_guessed()
-        self.build_start()
-        self.build_timer()
-        self.build_msg_label()
-
     def __guess_word(self):
+        """
+        Sends the user's guess to the game's logic
+        :return: None
+        """
         guess_word_msg = self.__controller.guess_word(self.__guessed_word)
+
+        # Check if the user guessed correctly
         if guess_word_msg is None:
             guessed_words = 'WORDS\n' + '\n'.join(
                 self.__controller.guessed_words)
@@ -296,14 +334,20 @@ class BoardUI:
             self.__words_guessed.delete(1.0, END)
             self.__words_guessed.insert(INSERT, guessed_words, 'center')
             self.__words_guessed.config(state=DISABLED)
-
             guess_word_msg = 'Nice one!'
+
         self.__score.config(text='Score=' + str(self.__controller.score))
         self.__guessed_word = ''
         self.__current_word.config(text='Letters: ' + self.__guessed_word)
         self.__msg_lbl.config(text=guess_word_msg)
 
-        # TODO: Put as function
+        self.__enable_all_buttons()
+
+    def __enable_all_buttons(self):
+        """
+        Enables all the buttons on the board
+        :return: None
+        """
         self.__pressed_buttons = []
         for row in self.__buttons:
             for btn in row:
@@ -334,6 +378,10 @@ class BoardUI:
         self.__undo.config(state=NORMAL)
 
     def __end_game(self):
+        """
+        Ends the game
+        :return: None
+        """
         self.start.config(text='RESTART', command=self.__restart_game,
                           state=NORMAL)
         self.__msg_lbl.config(text='Times Up!')
@@ -345,8 +393,8 @@ class BoardUI:
 
     def __restart_game(self):
         """
-        starts the game from brand new
-        :return:
+        Restarts the game with a brand new board
+        :return: None
         """
         self.__controller.restart_game()
         self.__start_game()
