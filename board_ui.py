@@ -1,6 +1,6 @@
 import tkinter
 from tkinter import DISABLED, NORMAL, ttk, INSERT, N, S, W, E, END
-from controller import Controller
+import board_bl_codes
 import math
 
 CURRENT_LETTERS_ROW = 0
@@ -27,6 +27,12 @@ MSG_LBL_COL = 0
 MSG_LBL_COLSPAN = 5
 START_BTN_ROW = 5
 START_BTN_COL = 4
+BAD_GUESS_CODE_TO_MSG = {
+    board_bl_codes.NO_GUESS: 'Come on, you can do better!',
+    board_bl_codes.ALREADY_GUESSED: 'Already guessed!',
+    board_bl_codes.NOT_A_WORD: '{}? That\'s not a real word...',
+    board_bl_codes.VALID_GUESS: 'Nice one!'
+}
 
 
 class BoardUI:
@@ -324,17 +330,17 @@ class BoardUI:
         Sends the user's guess to the game's logic
         :return: None
         """
-        guess_word_msg = self.__controller.guess_word(self.__guessed_word)
+        guess_word_code = self.__controller.guess_word(self.__guessed_word)
+        guess_word_msg = BAD_GUESS_CODE_TO_MSG[guess_word_code].format(self.__guessed_word)
 
         # Check if the user guessed correctly
-        if guess_word_msg is None:
+        if guess_word_code == board_bl_codes.VALID_GUESS:
             guessed_words = 'WORDS\n' + '\n'.join(
                 self.__controller.guessed_words)
             self.__words_guessed.config(state=NORMAL)
             self.__words_guessed.delete(1.0, END)
             self.__words_guessed.insert(INSERT, guessed_words, 'center')
             self.__words_guessed.config(state=DISABLED)
-            guess_word_msg = 'Nice one!'
 
         self.__score.config(text='Score=' + str(self.__controller.score))
         self.__guessed_word = ''
