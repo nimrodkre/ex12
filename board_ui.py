@@ -52,6 +52,7 @@ class BoardUI:
         self.__controller.times_up_sub(self.__end_game)
         self.__root.title('Crazy Boggle')
         self.__root.configure(bg="azure")
+        self.__root.resizable(False, False)
 
     @property
     def root(self):
