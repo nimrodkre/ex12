@@ -36,7 +36,7 @@ BAD_GUESS_CODE_TO_MSG = {
 
 
 class BoardUI:
-    # TODO: Create a class member
+    # TODO: Create a class member, no reason to be static
     button_coordinates = {}
 
     def __init__(self, controller):
@@ -116,6 +116,8 @@ class BoardUI:
         self.__current_word.config(text='Letters: ' + self.__guessed_word)
         self.__disable_buttons(i, j)
         self.__enable_buttons(i, j)
+        # TODO: You can just save the coordinates of the button instead of its
+        #  reference and than the static member is redundant
         self.__pressed_buttons.append(self.__buttons[i][j])
 
     def __disable_buttons(self, row, col):
@@ -151,8 +153,8 @@ class BoardUI:
 
     def __make_callback(self, i, j):
         """
-        Makes the function for the button callback, in order for each paramete
-        to be different
+        Makes the function for the button callback, in order for each
+        parameter to be different
         :param i: coordinate row for the callback
         :param j: coordinate col
         :return: function of callback
@@ -347,7 +349,8 @@ class BoardUI:
         :return: None
         """
         guess_word_code = self.__controller.guess_word(self.__guessed_word)
-        guess_word_msg = BAD_GUESS_CODE_TO_MSG[guess_word_code].format(self.__guessed_word)
+        guess_word_msg = BAD_GUESS_CODE_TO_MSG[guess_word_code].format(
+            self.__guessed_word)
 
         # Check if the user guessed correctly
         if guess_word_code == board_bl_codes.VALID_GUESS:
