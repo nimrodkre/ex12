@@ -36,8 +36,6 @@ BAD_GUESS_CODE_TO_MSG = {
 
 
 class BoardUI:
-    # TODO: Create a class member, no reason to be static
-    button_coordinates = {}
 
     def __init__(self, controller):
         """
@@ -47,6 +45,7 @@ class BoardUI:
         self.__controller = controller
         self.__root = tkinter.Tk()
         self.__buttons = []
+        self.__button_coordinates = {}
         self.__score = None
         self.__quit = None
         self.__start = None
@@ -127,12 +126,10 @@ class BoardUI:
         :param col: col
         :return: None
         """
-        # TODO: Iterate over buttons instead of board
-        # TODO: Use enumerate for the greater good
-        for i in range(len(self.__controller.board)):
-            for j in range(len(self.__controller.board[0])):
+        for i, button_row in enumerate(self.__buttons):
+            for j, button in enumerate(button_row):
                 if math.fabs(i - row) > 1 or math.fabs(j - col) > 1:
-                    self.__buttons[i][j].config(state=DISABLED)
+                    button.config(state=DISABLED)
         self.__buttons[row][col].config(state=DISABLED)
 
     def __enable_buttons(self, row, col):
@@ -142,14 +139,12 @@ class BoardUI:
         :param col:
         :return:
         """
-        # TODO: Iterate over buttons instead of board
-        for i in range(len(self.__controller.board)):
-            for j in range(len(self.__controller.board[0])):
+        for i, button_row in enumerate(self.__buttons):
+            for j, button in enumerate(button_row):
                 if not (math.fabs(i - row) > 1 or math.fabs(j - col) > 1) and \
-                        self.__buttons[i][
-                            j] not in self.__pressed_buttons and not (
+                        button not in self.__pressed_buttons and not (
                         i == row and j == col):
-                    self.__buttons[i][j].config(state=NORMAL)
+                    button.config(state=NORMAL)
 
     def __make_callback(self, i, j):
         """
@@ -180,7 +175,7 @@ class BoardUI:
         # Add buttons to screen
         for i in range(len(self.__buttons)):
             for j in range(len(self.__buttons[0])):
-                BoardUI.button_coordinates[self.__buttons[i][j]] = (i, j)
+                self.__button_coordinates[self.__buttons[i][j]] = (i, j)
                 self.__buttons[i][j].grid(row=i + BUTTONS_START_ROW,
                                           column=j + BUTTONS_START_COL)
 
@@ -248,7 +243,7 @@ class BoardUI:
         if len(self.__pressed_buttons) == 0:
             self.__enable_all_buttons()
             return
-        loc = BoardUI.button_coordinates[self.__pressed_buttons[-1]]
+        loc = self.__button_coordinates[self.__pressed_buttons[-1]]
         self.__disable_buttons(*loc)
         self.__enable_buttons(*loc)
 
